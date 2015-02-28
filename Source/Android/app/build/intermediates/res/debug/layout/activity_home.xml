@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity"
+    android:background="#ff2981b4">
+
+    <TextView
+        android:id="@+id/helloText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/activity_home.xml -->
