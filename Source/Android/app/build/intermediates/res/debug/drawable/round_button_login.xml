@@ -2,7 +2,7 @@
 <!-- http://www.dibbus.com/2011/02/gradient-buttons-for-android/ -->
     <shape xmlns:android="http://schemas.android.com/apk/res/android">
         android:shape="rectangle">
-        <gradient android:startColor="#ccce00"
+        <gradient android:startColor="#ffccce00"
             android:endColor="#ccce00"
             android:angle="270"></gradient>
 
@@ -11,4 +11,4 @@
             android:topLeftRadius="25dp"
             android:topRightRadius="25dp"></corners>
     </shape>
-<!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/drawable/round_button_login.xml -->
+<!-- From: file:/E:/SWE2/FCI-SocialNetwork-HHK-android/app/src/main/res/drawable/round_button_login.xml -->

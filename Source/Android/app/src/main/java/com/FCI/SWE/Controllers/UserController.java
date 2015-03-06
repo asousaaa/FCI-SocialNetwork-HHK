@@ -35,13 +35,13 @@ public class UserController {
 	public void login(String userName, String password) {
 
 		new Connection().execute(
-				"http://fci-hhk.appspot.com/rest/LoginService", userName,
+				"http://fci-sn-hhk.appspot.com/rest/LoginService", userName,
 				password, "LoginService");
 	}
 
 	public void signUp(String userName, String email, String password) {
 		new Connection().execute(
-				"http://fci-hhk.appspot.com/rest/RegistrationService", userName,
+				"http://fci-sn-hhk.appspot.com/rest/RegistrationService", userName,
 				email, password, "RegistrationService");
 	}
 
