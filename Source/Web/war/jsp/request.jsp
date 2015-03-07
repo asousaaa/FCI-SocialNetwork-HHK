@@ -6,10 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Insert title here</title>
 </head>
-<body >
+<body>
 
-
-<a href="/social/signup/">Sign up</a> <br>
-<a href="/social/login/">Login</a> <br>
 </body>
+<p>
+request page
+</p>
 </html>

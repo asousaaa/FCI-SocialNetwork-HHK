@@ -1,5 +1,6 @@
 package com.FCI.SWE.Models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class UserEntity {
 	private String name;
 	private String email;
 	private String password;
-
+	private String id;
 	/**
 	 * Constructor accepts user data
 	 * 
@@ -40,10 +41,18 @@ public class UserEntity {
 	 * @param password
 	 *            user provided password
 	 */
+	public UserEntity(String name, String email, String password,String id) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.id=id;
+
+	}
 	public UserEntity(String name, String email, String password) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+	
 
 	}
 
@@ -58,7 +67,10 @@ public class UserEntity {
 	public String getPass() {
 		return password;
 	}
-
+	public String getid() {
+		return (String) id;
+	}
+	
 	/**
 	 * 
 	 * This static method will form UserEntity class using json format contains
@@ -74,7 +86,8 @@ public class UserEntity {
 		try {
 			JSONObject object = (JSONObject) parser.parse(json);
 			return new UserEntity(object.get("name").toString(), object.get(
-					"email").toString(), object.get("password").toString());
+					"email").toString(), object.get("password").toString(),
+					 object.get("ID").toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,17 +115,38 @@ public class UserEntity {
 		Query gaeQuery = new Query("users");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {
-			System.out.println(entity.getProperty("name").toString());
+		//	System.out.println(entity.getProperty("name").toString());
 			if (entity.getProperty("name").toString().equals(name)
 					&& entity.getProperty("password").toString().equals(pass)) {
 				UserEntity returnedUser = new UserEntity(entity.getProperty(
 						"name").toString(), entity.getProperty("email")
-						.toString(), entity.getProperty("password").toString());
+						.toString(), entity.getProperty("password").toString(),
+						Long.toString(entity.getKey().getId()));
 				return returnedUser;
 			}
 		}
 
 		return null;
+	}
+
+	public static ArrayList<UserEntity> searchforuser(String name) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		ArrayList<UserEntity> returnedUser = new ArrayList<UserEntity>();
+		Query gaeQuery = new Query("users");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) {
+		//	System.out.println(entity.getProperty("name").toString());
+			if (entity.getProperty("name").toString().equals(name)) {
+				returnedUser.add(new UserEntity(entity.getProperty("name")
+						.toString(), entity.getProperty("email").toString(),
+						entity.getProperty("password").toString(),
+						Long.toString(entity.getKey().getId())));
+
+			}
+		}
+
+		return returnedUser;
 	}
 
 	/**

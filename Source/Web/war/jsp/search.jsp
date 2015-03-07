@@ -6,10 +6,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Insert title here</title>
 </head>
-<body >
+<body>
+<p>
+search page 
+we find :D 
+name: ${it.name}
+id: ${it.id}
+user id: ${it.uid}
 
-
-<a href="/social/signup/">Sign up</a> <br>
-<a href="/social/login/">Login</a> <br>
+</p>
 </body>
+
 </html>
