@@ -27,7 +27,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.FCI.SWE.Models.UserEntity;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 
 /**
  * This class contains REST services, also contains action function for web
@@ -73,6 +73,55 @@ public class Service {
 		return object.toString();
 	}
 
+	@POST
+	@Path("/RequestService")
+	public String requestService(@FormParam("friend_name")String friendname,
+			@FormParam("user_name")String username,
+			@FormParam("friend_id")String friendid,
+			@FormParam("user_id") String userid,
+			@FormParam("friend_accept") String faccept,
+			@FormParam("user_accept") String uaccept){
+		UserEntity user = new UserEntity();
+		user.saveRequset(friendname,username,friendid,userid,faccept,uaccept);
+		JSONObject object = new JSONObject();
+		object.put("Status", "OK");
+		return object.toString();
+	}
+	
+	@POST
+	@Path("/viewrequestService")
+	public String viewrequestService(@FormParam("user_id")String user_id){
+		UserEntity user = new UserEntity();
+		user = user.viewRequset(user_id);
+		
+		JSONObject object = new JSONObject();
+		object.put("Status", "OK");
+		object.put("friend_name",user.get_fname());
+		object.put("friend_id",user.getId());
+		object.put("user_id",user.get_userid());
+		return object.toString();
+	}
+	
+	@POST
+	@Path("/acceptrequestService")
+	public String acceptrequestService(@FormParam("user_id")String user_id,@FormParam("friend_id")String friend_id){
+		UserEntity user = new UserEntity();
+		
+		JSONObject object = new JSONObject();
+		
+		if(user.acceptRequset(user_id,friend_id)=="accept"){
+			object.put("Status", "OK");
+		 }
+		else {
+			object.put("Status", "Failed");
+		}
+		
+		return object.toString();
+	}
+	
+	
+	
+	
 	/**
 	 * Login Rest Service, this service will be called to make login process
 	 * also will check user data and returns new user from datastore
@@ -99,13 +148,14 @@ public class Service {
 				user1.put("name", user.get(i).getName());
 				user1.put("email", user.get(i).getEmail());
 				user1.put("password", user.get(i).getPass());
-				user1.put("ID",user.get(i).getid());
+				user1.put("ID",user.get(i).getId());
 			    array.add(user1);
+			    System.out.println("ser "+ user.get(i).getName());
 			}
 			
 			
 		}
-//System.out.println("size "+array.size());
+System.out.println("size "+array.size());
 		return array.toJSONString();
 
 	}
@@ -125,7 +175,7 @@ public class Service {
 			object.put("name", user.getName());
 			object.put("email", user.getEmail());
 			object.put("password", user.getPass());
-			object.put("ID",user.getid());
+			object.put("ID",user.getId());
 		}
 
 		return object.toString();

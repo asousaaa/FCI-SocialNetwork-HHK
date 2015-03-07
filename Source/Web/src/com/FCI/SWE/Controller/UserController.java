@@ -7,9 +7,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.FormParam;
@@ -47,16 +45,15 @@ public class UserController {
 	 * 
 	 * @return sign up page
 	 */
-	String activeuser="hhh";
+	
 	
 	@GET
 	@Path("/signup")
+	@Produces("text/html")
 	public Response signUp() {
 		return Response.ok(new Viewable("/jsp/register")).build();
 	}
-	public String getactiveuser(){
-		return activeuser;
-	}
+	
 
 	/**
 	 * Action function to render home page of application, home page contains
@@ -66,6 +63,7 @@ public class UserController {
 	 */
 	@GET
 	@Path("/")
+	@Produces("text/html")
 	public Response index() {
 		return Response.ok(new Viewable("/jsp/entryPoint")).build();
 	}
@@ -78,33 +76,100 @@ public class UserController {
 	 */
 	@GET
 	@Path("/login")
+	@Produces("text/html")
 	public Response login() {
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
 
 	@POST
 	@Path("/login")
+	@Produces("text/html")
 	public Response signout() {
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
 	
 	@POST
-	@Path("/request")
+	@Path("/viewrequest")
 	@Produces("text/html")
-	public Response viewrequest() {
-		return Response.ok(new Viewable("/jsp/request")).build();
+	public Response viewrequest(@FormParam("activeid") String uid) {
 		
+
+			String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/viewrequestService";
+		//	String serviceUrl = "http://localhost:8888/rest/viewrequestService";
+			
+			try {
+				URL url = new URL(serviceUrl);
+				String urlParameters = "user_id=" + uid ;
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setDoInput(true);
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestMethod("POST");
+				connection.setConnectTimeout(60000);  //60 Seconds
+				connection.setReadTimeout(60000);  //60 Seconds
+				
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStreamWriter writer = new OutputStreamWriter(
+						connection.getOutputStream());
+				writer.write(urlParameters);
+				writer.flush();
+				String line, retJson = "";
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				while ((line = reader.readLine()) != null) {
+					retJson += line;
+				}
+				writer.close();
+				reader.close();
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse(retJson);
+				JSONObject result= (JSONObject) obj;
+				
+				
+				if (result.get("Status").equals("Failed")){
+				System.out.println("not looool");
+					return Response.ok(new Viewable("/jsp/request")).build();
+				}
+				
+				Map<String,String> map= new HashMap<String,String>();
+				System.out.println(result.get("friend_name"));
+				map.put("fname",(String) result.get("friend_name"));
+				map.put("fid",(String) result.get("friend_id"));
+				map.put("uid",(String) result.get("user_id"));
+				
+				
+				
+				return Response.ok(new Viewable("/jsp/request",map)).build();
+				
+				
 	}
+	 catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+	return null;	
+	}
+	
 	
 	
 	@POST
 	@Path("/search")
 	@Produces("text/html")
 	public Response search(@FormParam("searchname") String sname ,
-			@FormParam("activeid") String activeid) {
+			@FormParam("activeid") String activeid,@FormParam("activename") String activename) {
 	//	String returnurl="/jsp/search";
-	//	String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/SearchService";
-		String serviceUrl = "http://localhost:8888/rest/SearchService";
+		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/SearchService";
+	//	String serviceUrl = "http://localhost:8888/rest/SearchService";
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -139,17 +204,25 @@ public class UserController {
 			JSONArray object = (JSONArray) obj;
 			JSONObject result= (JSONObject) object.get(0);
 			if (result.get("Status").equals("Failed")){
+				System.out.println("not looool");
 				return  Response.ok(new Viewable("/jsp/search")).build();
 			}
 			else{
-				for (int i=0;i<object.size();i++){	
+				System.out.println("loool");
+				System.out.print(object.size());
+				for (int i=0;i<object.size();i++){
+					System.out.println("i "+i);	
 				 result= (JSONObject) object.get(i);	
+				System.out.print("ctr "+ result.get("name"));
 				}
 			Map<String,String> searchresult= new HashMap<String,String>();
 			UserEntity user = UserEntity.getUser(result.toString());
-			searchresult.put("name",user.getName());
-			searchresult.put("id",user.getid());
+			searchresult.put("fname",user.getName());
+			searchresult.put("uname",activename);
+			searchresult.put("fid",user.getId());
 			searchresult.put("uid",activeid);
+			
+			
 			return Response.ok(new Viewable("/jsp/search",searchresult)).build();
 			}
 			
@@ -177,6 +250,138 @@ public class UserController {
 	
 	
 	
+	@POST
+	@Path("/request")
+	@Produces("text/html")
+	public String sendreqest(@FormParam("friend_name") String fname ,@FormParam("user_name") String uname ,
+			@FormParam("user_id") String uid,@FormParam("friend_id") String fid ) {
+	//	String returnurl="/jsp/search";
+		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/RequestService";
+	//	String serviceUrl = "http://localhost:8888/rest/RequestService";
+		
+		try {
+			URL url = new URL(serviceUrl);
+			String urlParameters = "friend_name=" + fname +"&user_name="+uname+"&friend_id=" + fid +"&user_id="+uid
+					+"&friend_accept=0"+"&user_accept=1";
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setConnectTimeout(60000);  //60 Seconds
+			connection.setReadTimeout(60000);  //60 Seconds
+			
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStreamWriter writer = new OutputStreamWriter(
+					connection.getOutputStream());
+			writer.write(urlParameters);
+			writer.flush();
+			String line, retJson = "";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+
+			while ((line = reader.readLine()) != null) {
+				retJson += line;
+			}
+			writer.close();
+			reader.close();
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			if (object.get("Status").equals("OK"))
+				return "Request send Successfully";
+			
+			}
+			
+			
+		
+		 catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/*
+			 * UserEntity user = new UserEntity(uname, email, pass);
+			 * user.saveUser(); return uname;
+			 */
+		return null;
+		
+		
+		
+	}
+	
+
+	@POST
+	@Path("/acceptrequest")
+	@Produces("text/html")
+	public String acceptrequest(@FormParam("user_id") String uid,@FormParam("friend_id") String fid ) {
+	//	String returnurl="/jsp/search";
+		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/acceptrequestService";
+	//	String serviceUrl = "http://localhost:8888/rest/acceptrequestService";
+		
+		try {
+			URL url = new URL(serviceUrl);
+			String urlParameters = "friend_id=" + fid +"&user_id="+uid;
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setConnectTimeout(60000);  //60 Seconds
+			connection.setReadTimeout(60000);  //60 Seconds
+			
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStreamWriter writer = new OutputStreamWriter(
+					connection.getOutputStream());
+			writer.write(urlParameters);
+			writer.flush();
+			String line, retJson = "";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+
+			while ((line = reader.readLine()) != null) {
+				retJson += line;
+			}
+			writer.close();
+			reader.close();
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			if (object.get("Status").equals("OK"))
+				return "done :D";
+			
+			}
+			
+			
+		
+		 catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/*
+			 * UserEntity user = new UserEntity(uname, email, pass);
+			 * user.saveUser(); return uname;
+			 */
+		return null;
+		
+		
+		
+	}
 	
 	
 	/**
@@ -197,8 +402,8 @@ public class UserController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
-		//String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/RegistrationService";
-		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
+		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/RegistrationService";
+	//	String serviceUrl = "http://localhost:8888/rest/RegistrationService";
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -265,8 +470,8 @@ public class UserController {
 	@Produces("text/html")
 	public Response home(@FormParam("uname") String uname,
 			@FormParam("password") String pass) {
-		//String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/LoginService";
-		String serviceUrl = "http://localhost:8888/rest/LoginService";
+		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/LoginService";
+	//	String serviceUrl = "http://localhost:8888/rest/LoginService";
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -304,8 +509,8 @@ public class UserController {
 			UserEntity user = UserEntity.getUser(object.toJSONString());
 			map.put("name", user.getName());
 			map.put("email", user.getEmail());
-			map.put("ID", user.getid());
-			 activeuser = user.getid();
+			map.put("ID", user.getId());
+			 
 			return Response.ok(new Viewable("/jsp/home", map)).build();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block

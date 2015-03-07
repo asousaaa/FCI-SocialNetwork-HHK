@@ -31,6 +31,9 @@ public class UserEntity {
 	private String email;
 	private String password;
 	private String id;
+	private String friend_name;
+	private String user_id;
+	
 	/**
 	 * Constructor accepts user data
 	 * 
@@ -41,6 +44,10 @@ public class UserEntity {
 	 * @param password
 	 *            user provided password
 	 */
+	public UserEntity() {
+		
+	}
+	
 	public UserEntity(String name, String email, String password,String id) {
 		this.name = name;
 		this.email = email;
@@ -52,8 +59,53 @@ public class UserEntity {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+	}
+	public UserEntity(String friend_name, String friend_id, String user_id,int i) {
+		this.friend_name = friend_name;
+		this.id = friend_id;
+		this.user_id = user_id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getFriend_name() {
+		return friend_name;
+	}
+
+	public void setFriend_name(String friend_name) {
+		this.friend_name = friend_name;
+	}
+
+	public String getuser_id() {
+		return user_id;
+	}
+
+	public void setuser_id(String user_id) {
+		this.user_id = user_id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getName() {
@@ -67,8 +119,12 @@ public class UserEntity {
 	public String getPass() {
 		return password;
 	}
-	public String getid() {
-		return (String) id;
+	
+	public String get_fname(){
+		return friend_name;
+	}
+	public String get_userid(){
+		return user_id;
 	}
 	
 	/**
@@ -95,6 +151,8 @@ public class UserEntity {
 		return null;
 
 	}
+	
+	
 
 	/**
 	 * 
@@ -171,4 +229,88 @@ public class UserEntity {
 		return true;
 
 	}
+	
+	
+	public Boolean saveRequset(String fre_name,String user_name,String fre_id,String user_id
+			,String friend_accept,String user_accept){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("request");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+
+		Entity employee = new Entity("request", list.size() + 1);
+		employee.setProperty("friend_name",fre_name);
+		employee.setProperty("user_name", user_name);
+		employee.setProperty("friend_id",fre_id);
+		employee.setProperty("user_id", user_id);
+		employee.setProperty("friend_accept", friend_accept);
+		employee.setProperty("user_accept", user_accept);
+		datastore.put(employee);
+
+		return true;
+
+	}
+
+	public UserEntity viewRequset(String user_id) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("request");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		
+		System.out.println(user_id);
+		for (Entity entity : pq.asIterable()) {
+			//	System.out.println(entity.getProperty("user_id").toString());
+		//		System.out.println(entity.getProperty("friend_accept").toString());
+				if (entity.getProperty("user_id").toString().equals(user_id)
+					&& entity.getProperty("friend_accept").toString().equals("0")) {
+					UserEntity returnedUser = new UserEntity();
+//							(entity.getProperty("friend_name").toString(),
+	//						entity.getProperty("friend_id").toString(),entity.getProperty("friend_accept").toString(),1);
+					returnedUser.setFriend_name(entity.getProperty("friend_name").toString());
+					returnedUser.setId(entity.getProperty("friend_id").toString());
+					returnedUser.setuser_id(entity.getProperty("user_id").toString());
+					
+					System.out.println("enter");
+					return returnedUser;
+				}
+			}
+		return null;
+
+			
+		}
+	
+	public String acceptRequset(String user_id,String friend_id) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("request");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		
+		
+		
+		System.out.println("find1 "+user_id+" "+friend_id);
+		for (Entity entity : pq.asIterable()) {
+			//	System.out.println(entity.getProperty("name").toString());
+				if (entity.getProperty("user_id").toString().equals(user_id)
+						&& entity.getProperty("friend_id").toString().equals(friend_id)
+						&& entity.getProperty("friend_accept").toString().equals("0")) {
+					Entity employee = new Entity("request",Integer.valueOf(Long.toString(entity.getKey().getId()))) ;
+					employee.setProperty("friend_name",entity.getProperty("friend_name").toString());
+					employee.setProperty("user_name",entity.getProperty("user_name").toString());
+					employee.setProperty("friend_id",friend_id);
+					employee.setProperty("user_id", user_id);
+					employee.setProperty("friend_accept","1");
+					employee.setProperty("user_accept","1");
+				datastore.put(employee);	
+					System.out.println("find");
+				return "accept";
+				}
+			}
+
+			return null;
+		}
+		
+		
+	
+	
 }

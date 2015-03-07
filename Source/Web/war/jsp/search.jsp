@@ -9,12 +9,16 @@
 <body>
 <p>
 search page 
-we find :D 
-name: ${it.name}
-id: ${it.id}
-user id: ${it.uid}
 
 </p>
+<form action="request" method="post">
+<input type="hidden" name="friend_id" value=${it.fid } />
+<input type="hidden" name="user_id" value=${it.uid } />
+<input type="hidden" name="friend_name" value=${it.fname } />
+<input type="hidden" name="user_name" value=${it.uname } />
+<input type="submit" name="request" value="send request to ${it.fname}"  />
+</form>
+
 </body>
 
 </html>

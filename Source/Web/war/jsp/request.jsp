@@ -11,5 +11,13 @@
 </body>
 <p>
 request page
+
+
 </p>
+<form action="acceptrequest" method="post">
+<input type="hidden" name="friend_id" value=${it.fid } />
+<input type="hidden" name="user_id" value=${it.uid } />
+${it.fname} send you request <input type="submit"  value="accept"/> 
+
+</form>
 </html>
