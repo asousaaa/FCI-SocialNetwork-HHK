@@ -219,7 +219,7 @@ public class UserEntity {
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		Entity employee = new Entity("users", list.size() + 1);
+		Entity employee = new Entity("users", list.size() + 2);
 
 		employee.setProperty("name", this.name);
 		employee.setProperty("email", this.email);
@@ -232,20 +232,19 @@ public class UserEntity {
 	
 	
 	public Boolean saveRequset(String fre_name,String user_name,String fre_id,String user_id
-			,String friend_accept,String user_accept){
+			,String status){
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Query gaeQuery = new Query("request");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		Entity employee = new Entity("request", list.size() + 1);
+		Entity employee = new Entity("request", list.size() + 2);
 		employee.setProperty("friend_name",fre_name);
 		employee.setProperty("user_name", user_name);
 		employee.setProperty("friend_id",fre_id);
 		employee.setProperty("user_id", user_id);
-		employee.setProperty("friend_accept", friend_accept);
-		employee.setProperty("user_accept", user_accept);
+		employee.setProperty("status", status);
 		datastore.put(employee);
 
 		return true;
@@ -262,18 +261,17 @@ public class UserEntity {
 		for (Entity entity : pq.asIterable()) {
 			//	System.out.println(entity.getProperty("user_id").toString());
 		//		System.out.println(entity.getProperty("friend_accept").toString());
-				if (entity.getProperty("user_id").toString().equals(user_id)
-					&& entity.getProperty("friend_accept").toString().equals("0")) {
+				if (entity.getProperty("friend_id").toString().equals(user_id)
+					&& entity.getProperty("status").toString().equals("send")) {
 					UserEntity returnedUser = new UserEntity();
-//							(entity.getProperty("friend_name").toString(),
-	//						entity.getProperty("friend_id").toString(),entity.getProperty("friend_accept").toString(),1);
-					returnedUser.setFriend_name(entity.getProperty("friend_name").toString());
-					returnedUser.setId(entity.getProperty("friend_id").toString());
-					returnedUser.setuser_id(entity.getProperty("user_id").toString());
+					returnedUser.setFriend_name(entity.getProperty("user_name").toString());
+					returnedUser.setId(entity.getProperty("user_id").toString());
+					returnedUser.setuser_id(entity.getProperty("friend_id").toString());
 					
 					System.out.println("enter");
 					return returnedUser;
 				}
+				
 			}
 		return null;
 
@@ -293,15 +291,17 @@ public class UserEntity {
 			//	System.out.println(entity.getProperty("name").toString());
 				if (entity.getProperty("user_id").toString().equals(user_id)
 						&& entity.getProperty("friend_id").toString().equals(friend_id)
-						&& entity.getProperty("friend_accept").toString().equals("0")) {
-					Entity employee = new Entity("request",Integer.valueOf(Long.toString(entity.getKey().getId()))) ;
-					employee.setProperty("friend_name",entity.getProperty("friend_name").toString());
-					employee.setProperty("user_name",entity.getProperty("user_name").toString());
-					employee.setProperty("friend_id",friend_id);
-					employee.setProperty("user_id", user_id);
-					employee.setProperty("friend_accept","1");
-					employee.setProperty("user_accept","1");
-				datastore.put(employee);	
+						&& entity.getProperty("status").toString().equals("send")) {
+					entity.setProperty("status","accept");
+				datastore.put(entity);	
+					System.out.println("find");
+				return "accept";
+				}
+				else if (entity.getProperty("friend_id").toString().equals(user_id)
+						&& entity.getProperty("user_id").toString().equals(friend_id)
+						&& entity.getProperty("status").toString().equals("send")) {
+					entity.setProperty("status","accept");
+				datastore.put(entity);	
 					System.out.println("find");
 				return "accept";
 				}

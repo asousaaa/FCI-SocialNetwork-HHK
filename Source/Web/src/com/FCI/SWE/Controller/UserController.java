@@ -45,7 +45,8 @@ public class UserController {
 	 * 
 	 * @return sign up page
 	 */
-	
+	public String service_url="http://fci-sn-hhk.appspot.com/rest/";
+//	public String service_url="http://localhost:8888/rest/";
 	
 	@GET
 	@Path("/signup")
@@ -59,7 +60,7 @@ public class UserController {
 	 * Action function to render home page of application, home page contains
 	 * only signup and login buttons
 	 * 
-	 * @return enty point page (Home page of this application)
+	 * @return entry point page (Home page of this application)
 	 */
 	@GET
 	@Path("/")
@@ -71,8 +72,8 @@ public class UserController {
 	/**
 	 * Action function to render login page this function will be executed using
 	 * url like this /rest/login
-	 * 
-	 * @return login page
+	 * sign out 
+	 * @return login page 
 	 */
 	@GET
 	@Path("/login")
@@ -80,22 +81,32 @@ public class UserController {
 	public Response login() {
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
-
+	/**
+	 * Action function to  render login page this function will be executed using
+	 * url like this /rest/login
+	 * 
+	 * @return login page to give option to sign in again
+	 */
 	@POST
 	@Path("/login")
 	@Produces("text/html")
 	public Response signout() {
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
-	
+	/**
+	 * Action function to show requests 
+	 * url like this /rest/viewrequest	 
+	 * show all requests to be friend with someone who added you
+	 * @return request page
+	 */
 	@POST
 	@Path("/viewrequest")
 	@Produces("text/html")
 	public Response viewrequest(@FormParam("activeid") String uid) {
 		
 
-			String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/viewrequestService";
-		//	String serviceUrl = "http://localhost:8888/rest/viewrequestService";
+			String serviceUrl = service_url+"viewrequestService";
+		
 			
 			try {
 				URL url = new URL(serviceUrl);
@@ -160,16 +171,22 @@ public class UserController {
 	return null;	
 	}
 	
-	
+	/**
+	 * Action function to render search page this function will be executed using
+	 * url like this /rest/search
+	 *  search for friends to add them 
+	 * @return search page
+	 */
+
 	
 	@POST
 	@Path("/search")
 	@Produces("text/html")
 	public Response search(@FormParam("searchname") String sname ,
 			@FormParam("activeid") String activeid,@FormParam("activename") String activename) {
-	//	String returnurl="/jsp/search";
-		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/SearchService";
-	//	String serviceUrl = "http://localhost:8888/rest/SearchService";
+	
+		String serviceUrl = service_url+"SearchService";
+	
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -248,21 +265,27 @@ public class UserController {
 		
 	}
 	
-	
+	/**
+	 * Action function to render request page this function will be executed using
+	 * url like this /rest/request
+	 * add friend
+	 * @return request page
+	 */
+
 	
 	@POST
 	@Path("/request")
 	@Produces("text/html")
 	public String sendreqest(@FormParam("friend_name") String fname ,@FormParam("user_name") String uname ,
 			@FormParam("user_id") String uid,@FormParam("friend_id") String fid ) {
-	//	String returnurl="/jsp/search";
-		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/RequestService";
-	//	String serviceUrl = "http://localhost:8888/rest/RequestService";
+	
+		String serviceUrl = service_url+"RequestService";
+	
 		
 		try {
 			URL url = new URL(serviceUrl);
 			String urlParameters = "friend_name=" + fname +"&user_name="+uname+"&friend_id=" + fid +"&user_id="+uid
-					+"&friend_accept=0"+"&user_accept=1";
+					+"&status=send";
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setDoOutput(true);
@@ -316,15 +339,19 @@ public class UserController {
 		
 		
 	}
-	
+	/**
+	 * Action function to accept friend request
+	 * url like this /rest/acceptrequest
+	 * accept friend request
+	 */
 
 	@POST
 	@Path("/acceptrequest")
 	@Produces("text/html")
 	public String acceptrequest(@FormParam("user_id") String uid,@FormParam("friend_id") String fid ) {
-	//	String returnurl="/jsp/search";
-		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/acceptrequestService";
-	//	String serviceUrl = "http://localhost:8888/rest/acceptrequestService";
+
+		String serviceUrl = service_url+"acceptrequestService";
+	
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -402,8 +429,9 @@ public class UserController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
-		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/RegistrationService";
-	//	String serviceUrl = "http://localhost:8888/rest/RegistrationService";
+		
+		String serviceUrl =service_url+"RegistrationService";
+	
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -470,8 +498,9 @@ public class UserController {
 	@Produces("text/html")
 	public Response home(@FormParam("uname") String uname,
 			@FormParam("password") String pass) {
-		String serviceUrl = "http://fci-sn-hhk.appspot.com/rest/LoginService";
-	//	String serviceUrl = "http://localhost:8888/rest/LoginService";
+		
+		String serviceUrl = service_url+"LoginService";
+	
 		
 		try {
 			URL url = new URL(serviceUrl);

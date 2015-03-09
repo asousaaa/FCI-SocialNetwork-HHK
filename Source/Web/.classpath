@@ -41,5 +41,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/osgi-resource-locator-1.0.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/persistence-api-1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/validation-api-1.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Fci/Eclipse/workspace/FCI-SocialNetwork-HHK/war/WEB-INF/lib/appengine-endpoints.jar"/>
+	<classpathentry kind="lib" path="D:/Fci/Eclipse/workspace/FCI-SocialNetwork-HHK/war/WEB-INF/lib/appengine-endpoints-deps.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
