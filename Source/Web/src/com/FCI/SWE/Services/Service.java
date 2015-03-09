@@ -79,9 +79,10 @@ public class Service {
 			@FormParam("user_name")String username,
 			@FormParam("friend_id")String friendid,
 			@FormParam("user_id") String userid,
-			@FormParam("status") String status){
+			@FormParam("friend_accept") String faccept,
+			@FormParam("user_accept") String uaccept){
 		UserEntity user = new UserEntity();
-		user.saveRequset(friendname,username,friendid,userid,status);
+		user.saveRequset(friendname,username,friendid,userid,faccept,uaccept);
 		JSONObject object = new JSONObject();
 		object.put("Status", "OK");
 		return object.toString();
