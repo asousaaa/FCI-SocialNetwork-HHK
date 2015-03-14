@@ -19,7 +19,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:gridlayout-v7:19.1.0'
-    compile 'com.android.support:gridlayout-v7:19.1.0'
     compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.android.support:gridlayout-v7:19.1.0'
+    compile 'com.android.support:gridlayout-v7:19.1.0'
+    compile files('src/Libs/json-simple-1.1.1.jar')
 }

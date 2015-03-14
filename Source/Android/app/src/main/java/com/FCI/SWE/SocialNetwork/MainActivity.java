@@ -17,36 +17,43 @@ public class MainActivity extends Activity {
 
 
     Button login, signUp;
-
+    boolean flage ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         login = (Button) findViewById(R.id.login);
         signUp = (Button) findViewById(R.id.signUp);
-        boolean flage = isNetworkAvailable();
-        if(flage==false){
-            Toast.makeText(getApplication(), "No network connection ,app will be exit.", Toast.LENGTH_LONG).show();
-            finish();
-        }
+
+        flage = isNetworkAvailable();
 
         login.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
+                flage = isNetworkAvailable();
                 // TODO Auto-generated method stub
-                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(loginIntent);
-
+                if(flage==false){
+                    Toast.makeText(getApplication(), "No network connection", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(loginIntent);
+                }
             }
         });
         signUp.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                flage = isNetworkAvailable();
                 // TODO Auto-generated method stub
-                Intent registerationIntent = new Intent(getApplicationContext(), RegistrationActivity.class);
-                startActivity(registerationIntent);
+                if (flage == false) {
+                    Toast.makeText(getApplication(), "No network connection", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent registerationIntent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                    startActivity(registerationIntent);
+                }
             }
         });
     }
@@ -64,7 +71,7 @@ public class MainActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Toast.makeText(getApplication(), "your settig", Toast.LENGTH_LONG).show();
-
+                setContentView(R.layout.activity_home);
                 return true;
             case R.id.action_help:
                 Toast.makeText(getApplication(), "your help", Toast.LENGTH_LONG).show();

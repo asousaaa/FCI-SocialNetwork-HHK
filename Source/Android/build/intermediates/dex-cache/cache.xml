@@ -15,5 +15,12 @@
         sha1="af4cc326e6cd92f88db12298767e521743aedd36">
         <dex dex="C:\Users\hosam azzam\AndroidStudioProjects\FCI-SocialNetwork-HHK-android\app\build\intermediates\pre-dexed\debug\classes-a9536b8637c28815245682b71ca46b49d7453b68.jar" />
     </item>
+    <item
+        jar="C:\Users\hosam azzam\AndroidStudioProjects\FCI-SocialNetwork-HHK-android\app\src\Libs\json-simple-1.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="5d6f9b6a9ddca2a28c0216cc44efb2e20d9c23b5">
+        <dex dex="C:\Users\hosam azzam\AndroidStudioProjects\FCI-SocialNetwork-HHK-android\app\build\intermediates\pre-dexed\debug\json-simple-1.1.1-19e23856c7ba1a28046421b16cab567a9b4019c1.jar" />
+    </item>
 
 </items>

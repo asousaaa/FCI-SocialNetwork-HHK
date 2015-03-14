@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@drawable/splash2"
+    android:background="@drawable/splash3"
     >
 
     <LinearLayout
@@ -35,7 +35,7 @@
                 android:id="@+id/textView"
                 android:layout_centerInParent="true"
 
-                />
+                android:textStyle="bold" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -45,14 +45,15 @@
             android:layout_height="wrap_content"
             android:text="It's a social network application You can send request , sign out ..ect "
             android:layout_marginTop="15dp"
-        android:paddingLeft="15dp"
+            android:padding="15dp"
+            android:gravity="center"
             android:textSize="32sp"
             android:enabled="false"
             android:textColor="#FFCCCE00"
             android:id="@+id/textView0"
             android:layout_centerInParent="true"
 
-            />
+            android:textStyle="bold" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -70,7 +71,7 @@
                 android:id="@+id/textView1"
                 android:layout_centerInParent="true"
 
-                />
+                android:textStyle="bold" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -87,7 +88,7 @@
                 android:id="@+id/textView2"
                 android:layout_centerInParent="true"
 
-                />
+                android:textStyle="bold" />
         </RelativeLayout>
 
 
@@ -107,14 +108,6 @@
         -->
 
 
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Button 4" />
-
-
     </LinearLayout>
 
-</ScrollView><!-- From: file:/E:/SWE2/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/activity_about.xml -->
+</ScrollView><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/activity_about.xml -->

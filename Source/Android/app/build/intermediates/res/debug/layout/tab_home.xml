@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +9,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tab1_fragment_string"
-        android:id="@+id/hellotext"/>
+        android:text="tab1_fragm \n ent_string"
+        android:id="@+id/hellotext"
+        android:textColor="#ff000000"
+        android:textSize="25sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:gravity="center" />
 
-</LinearLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_home.xml -->
+</RelativeLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_home.xml -->

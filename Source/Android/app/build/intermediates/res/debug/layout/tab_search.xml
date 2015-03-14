@@ -1,15 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#65ffffff">
 
-    <TextView
+
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tab1_fragment_string"
-        android:id="@+id/hellotext"/>
+        android:id="@+id/searchtext"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:inputType="text"
+        android:hint="User Name"
+        android:text="ahmed"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/searchbutton"
+        android:layout_toStartOf="@+id/searchbutton"
+        android:layout_margin="10dp" />
 
-</LinearLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_search.xml -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+
+        android:id="@+id/searchbutton"
+        android:layout_alignTop="@+id/searchtext"
+        android:layout_alignRight="@+id/scrollView"
+        android:layout_alignEnd="@+id/scrollView"
+        android:layout_alignBottom="@+id/searchtext" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/searchtext"
+        android:background="#bcffffff">
+
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/searchtable"
+            android:shrinkColumns="*"
+            android:stretchColumns="*">
+            </TableLayout>
+    </ScrollView>
+
+
+</RelativeLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_search.xml -->

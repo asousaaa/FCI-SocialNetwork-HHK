@@ -6,7 +6,7 @@ public class UserEntity {
 	private String name;
 	private String email;
 	private String password;
-
+    private String id;
 	/**
 	 * Constructor accepts user data
 	 * 
@@ -26,6 +26,14 @@ public class UserEntity {
 
 	}
 
+    private UserEntity(String name, String email, String password,String ID) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.id = ID;
+
+    }
+
 	public String getName() {
 		return name;
 	}
@@ -37,6 +45,10 @@ public class UserEntity {
 	public String getPass() {
 		return password;
 	}
+
+    public String getID() {
+        return id;
+    }
 
 	/**
 	 * 
@@ -54,7 +66,8 @@ public class UserEntity {
 			try {
 				object = new JSONObject(json);
 				return  new UserEntity(object.get("name").toString(), object.get(
-						"email").toString(), object.get("password").toString());
+						"email").toString(), object.get("password").toString(),
+                        object.get("ID").toString());
 				
 			
 			} catch (JSONException e) {

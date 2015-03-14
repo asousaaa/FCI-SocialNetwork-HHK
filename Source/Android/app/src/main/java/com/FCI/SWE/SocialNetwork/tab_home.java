@@ -11,10 +11,13 @@ import android.widget.TextView;
 
 public class tab_home extends Fragment  {
     TextView helloTextView;
-    Activity act = new Activity();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+
     }
 
 
@@ -24,16 +27,16 @@ public class tab_home extends Fragment  {
         View V = inflater.inflate(R.layout.tab_home, container, false);
         Activity act=new Activity();
 
-        String status = HomeActivity.extras.getString("status");
-        String name = "",welcome="Hello";
 
-        if(HomeActivity.extras.containsKey("name")){
-            name = HomeActivity.extras.getString("name");
+        String name = "",welcome="";
+
+        if(HomeActivity.extras.containsKey("username")){
+            name = HomeActivity.extras.getString("username");
             welcome = "Welcome " + name;
         }
 
         helloTextView = (TextView) V.findViewById(R.id.hellotext);
-        String text = status + " ... welcome "+ welcome;
+        String text = welcome;
         helloTextView.setText(text);
 
 
