@@ -10,7 +10,7 @@ public class tab_setting extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View V = inflater.inflate(R.layout.tab_search, container, false);
+        View V = inflater.inflate(R.layout.activity_about, container, false);
 
         return V;
     }

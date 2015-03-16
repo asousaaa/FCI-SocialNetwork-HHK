@@ -81,7 +81,7 @@ public class tab_request extends Fragment  implements View.OnClickListener {
 
         UserController controller = Application.getUserController();
 
-        controller.acceptRequest(controller.GetActiveUserId(),String.valueOf((tv[1].getId()-1)));
+        controller.acceptRequest(controller.GetActiveUserId(),String.valueOf((tv[1].getId())));
 
 
     }

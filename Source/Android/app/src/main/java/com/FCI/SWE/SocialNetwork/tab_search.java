@@ -101,7 +101,7 @@ public class tab_search extends Fragment implements View.OnClickListener {
             System.out.println(tv[1].getId());
             System.out.println(controller.GetActiveUserName());
             System.out.println(controller.GetActiveUserId());
-            controller.sendRequest(tv[1].getText().toString(),String.valueOf((tv[1].getId()-1)),controller.GetActiveUserName(),controller.GetActiveUserId());
+            controller.sendRequest(tv[1].getText().toString(),String.valueOf((tv[1].getId())),controller.GetActiveUserName(),controller.GetActiveUserId());
 
         }
     }

@@ -67,7 +67,7 @@ public class HomeActivity extends FragmentActivity implements
                 this.mTabHost.newTabSpec("Tab4").setIndicator(
                         "",
                         getResources().getDrawable(
-                                R.drawable.ic_action_settings)));
+                                R.drawable.ic_action_about)));
 
         mTabHost.setOnTabChangedListener(this);
 

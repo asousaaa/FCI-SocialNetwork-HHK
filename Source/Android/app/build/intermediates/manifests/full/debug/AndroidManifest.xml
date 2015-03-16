@@ -42,6 +42,7 @@
         </activity>
         <activity
             android:name="com.FCI.SWE.SocialNetwork.HomeActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.FCI.SWE.SocialNetwork.HomeActivity" />

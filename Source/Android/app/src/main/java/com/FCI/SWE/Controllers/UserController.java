@@ -249,7 +249,7 @@ public class UserController {
 
 
                     if(!ret.containsKey("Status") || ret.get("Status").equals("Failed")){
-                        Toast.makeText(Application.getAppContext(), "Name not found, search again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Application.getAppContext(), "no Request found.", Toast.LENGTH_LONG).show();
                         return;
                     }
 
