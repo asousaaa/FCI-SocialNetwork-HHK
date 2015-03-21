@@ -1,5 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context="com.FCI.SWE.SocialNetwork.splashActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.FCI.HHK.SocialNetwork.splashActivity">
 
 
 </menu>

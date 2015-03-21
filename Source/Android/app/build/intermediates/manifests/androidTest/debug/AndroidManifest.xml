@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.FCI.SWE.SocialNetwork.test">
+    package="com.FCI.HHK.M.Chat.test">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
 
@@ -9,8 +9,8 @@
     </application>
 
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-                     android:targetPackage="com.FCI.SWE.SocialNetwork"
+                     android:targetPackage="com.FCI.HHK.M.Chat"
                      android:handleProfiling="false"
                      android:functionalTest="false"
-                     android:label="Tests for com.FCI.SWE.SocialNetwork"/>
+                     android:label="Tests for com.FCI.HHK.M.Chat"/>
 </manifest>
