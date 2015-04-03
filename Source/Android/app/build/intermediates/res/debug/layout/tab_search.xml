@@ -1,56 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#65ffffff">
+    android:layout_height="match_parent">
 
+    <RelativeLayout
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchtext"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="25dp"
-        android:inputType="text"
-        android:hint="User Name"
-        android:text="ahmed hosam"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/searchbutton"
-        android:layout_toStartOf="@+id/searchbutton"
-        android:layout_margin="10dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search"
-
-        android:id="@+id/searchbutton"
-        android:layout_alignTop="@+id/searchtext"
-        android:layout_alignRight="@+id/scrollView"
-        android:layout_alignEnd="@+id/scrollView"
-        android:layout_alignBottom="@+id/searchtext" />
-
-    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/scrollView"
-        android:layout_margin="5dp"
-        android:layout_below="@+id/searchtext"
-        android:background="#bcffffff">
+        android:layout_height="wrap_content"
+        android:background="#65ffffff"
+        android:orientation="vertical">
 
 
-        <TableLayout
+        <RelativeLayout
+            android:id="@+id/search_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/searchtable"
-            android:shrinkColumns="*"
-            android:stretchColumns="*">
 
-        </TableLayout>
-    </ScrollView>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/holo_blue_dark"
+            android:paddingBottom="10dp">
+
+            <EditText
+                android:id="@+id/searchtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_toLeftOf="@+id/searchbutton"
+                android:layout_toStartOf="@+id/searchbutton"
+                android:hint="User Name"
+                android:inputType="text"
+                android:text="ahmed" />
+
+            <ImageButton
+                android:id="@+id/searchbutton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/searchtext"
+                android:layout_alignParentEnd="true"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/searchtext"
+                android:src="@drawable/ic_action_search" />
+        </RelativeLayout>
 
 
-</RelativeLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_search.xml -->
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/search_header"
+            android:background="#bcffffff">
+
+
+            <TableLayout
+                android:id="@+id/searchtable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+            </TableLayout>
+        </ScrollView>
+
+
+        <RelativeLayout
+            android:id="@+id/friend_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scrollView"
+            android:background="@android:color/holo_blue_dark"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/friendtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+
+                android:layout_toLeftOf="@+id/show"
+                android:layout_toStartOf="@+id/show"
+                android:text="Friend list"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/show_friend"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/friendtext"
+                android:layout_alignParentEnd="true"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/friendtext"
+                android:src="@drawable/ic_action_expand" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/friend_View"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/friend_header"
+            android:background="#bcffffff">
+
+
+            <TableLayout
+                android:id="@+id/friendtable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+            </TableLayout>
+        </ScrollView>
+
+
+    </RelativeLayout>
+</ScrollView><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_search.xml -->

@@ -36,17 +36,18 @@ public class tab_request extends Fragment implements View.OnClickListener {
         Button request = (Button) V.findViewById(R.id.refresh);
         request.setOnClickListener(this);
         request.setId(0);
-        if (HomeActivity.extras.getString("service").equals("viewrequest")) {
+        requesttable = (TableLayout) V.findViewById(R.id.requesttable);
+        if (HomeActivity.extras.getString("viewrequest_service").equals("viewrequest")) {
 
-            requesttable = (TableLayout) V.findViewById(R.id.requesttable);
 
-            int size = Integer.valueOf(HomeActivity.extras.getString("arraysize"));
+
+            int size = Integer.valueOf(HomeActivity.extras.getString("viewrequest_arraysize"));
             //    String name = HomeActivity.extras.getString("vfriendname");
             //    String welcome = HomeActivity.extras.getString("status");
             //    System.out.println(welcome + " " + name);
             try {
                 JSONParser parser = new JSONParser();
-                Object obj = parser.parse(HomeActivity.extras.getString("array"));
+                Object obj = parser.parse(HomeActivity.extras.getString("viewrequest_array"));
                 JSONArray object = (JSONArray) obj;
 
                 for (int i = 1; i <= size; i++) {
@@ -87,6 +88,7 @@ public class tab_request extends Fragment implements View.OnClickListener {
             }
 
         }
+        else requesttable.removeAllViews();
 
         return V;
     }
@@ -101,6 +103,7 @@ public class tab_request extends Fragment implements View.OnClickListener {
             UserController controller = Application.getUserController();
 
             controller.acceptRequest(controller.GetActiveUserId(), String.valueOf((tv[view.getId()].getId())));
+            controller.viewRequest(controller.GetActiveUserId());
         }
 
     }

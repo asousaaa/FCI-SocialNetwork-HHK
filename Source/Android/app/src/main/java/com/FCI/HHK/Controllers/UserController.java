@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.widget.Toast;
 import android.content.Context;
 
@@ -27,7 +28,7 @@ public class UserController {
     private SharedPreferences shared;
     private int position = 0;
     HomeActivity h = new HomeActivity();
-
+    public static Bundle bundle;
     //position = shared.getInt("pos", 0);
     static Intent homeIntent = new Intent(Application.getAppContext(),
             HomeActivity.class);
@@ -65,6 +66,30 @@ public class UserController {
                 password, "LoginService");
 
            }
+
+    public void Notification(String userid) {
+
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/NotificationsService", userid
+                , "NotificationsService");
+
+    }
+
+    public void listfriend(String userid) {
+
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/FriendList", userid
+                , "FriendList");
+
+    }
+
+    public void sendmessage(String userid,String friendid,String username,String friendname,String msg) {
+
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/SendMessageService", userid,friendid,
+                 username,friendname,msg, "SendMessageService");
+
+    }
 
     public void logout() {
         currentActiveUser = null;
@@ -136,6 +161,14 @@ public class UserController {
                         + "&status=send";
             } else if (serviceType.equals("acceptrequestService")) {
                 urlParameters = "friend_id=" + params[1] + "&user_id=" + params[2];
+            } else if (serviceType.equals("NotificationsService")) {
+            urlParameters = "userid=" + params[1];
+            }
+            else if (serviceType.equals("FriendList")) {
+                urlParameters = "userid=" + params[1];
+            }else if (serviceType.equals("SendMessageService")) {
+                urlParameters = "user_id=" + params[1]+"&friend_id="+params[2]+
+                        "&user_name=" + params[3]+"&friend_name="+params[4]+"&content="+params[5];
             }
 
 
@@ -210,10 +243,37 @@ public class UserController {
                     homeIntent.putExtra("userpassword", object.get("password").toString());
                     homeIntent.putExtra("useremail", object.get("email").toString());
                     homeIntent.putExtra("service", "login");
+                    homeIntent.putExtra("search_service", "null");
+                    homeIntent.putExtra("Notification_service", "null");
+                    homeIntent.putExtra("FriendList_service", "null");
+                    homeIntent.putExtra("viewrequest_service", "null");
+                    homeIntent.putExtra("sendrequest_service", "null");
+                    homeIntent.putExtra("acceptrequest_service", "null");
+//                    userController.Notification(currentActiveUser.getID());
                     Application.getAppContext().startActivity(homeIntent);
                 }
 
                 else if (serviceType.equals("RegistrationService")) {
+
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONObject object = (JSONObject) obj;
+
+                    if (!object.containsKey("Status") || object.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "Registration failed, Please try again.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Intent homeIntent = new Intent(Application.getAppContext(),
+                            MainActivity.class);
+
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    homeIntent.putExtra("status", "Registered successfully");
+                    homeIntent.putExtra("service", "signup");
+                    Toast.makeText(Application.getAppContext(), "Registered successfully, now you can login.", Toast.LENGTH_LONG).show();
+                    Application.getAppContext().startActivity(homeIntent);
+                }
+
+                else if (serviceType.equals("SendMessage")) {
 
                     JSONParser parser = new JSONParser();
                     Object obj = parser.parse(result);
@@ -241,20 +301,75 @@ public class UserController {
 
                     if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
                         Toast.makeText(Application.getAppContext(), "Name not found, search again.", Toast.LENGTH_LONG).show();
+                        homeIntent.putExtra("search_service", "null");
                         return;
                     }
 
                     //    Intent homeIntent = new Intent(Application.getAppContext(),
                     //           HomeActivity.class);
+
                     homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     homeIntent.putExtra("status", "lool you find");
-                    homeIntent.putExtra("service", "search");
-                    homeIntent.putExtra("arraysize", String.valueOf(object.size()));
-                    System.out.println("size " + object.size());
-                    homeIntent.putExtra("array", result);
+                    homeIntent.putExtra("search_service", "search");
+                    homeIntent.putExtra("search_arraysize", String.valueOf(object.size()));
+                    homeIntent.putExtra("search_array", result);
 
                     Application.getAppContext().startActivity(homeIntent);
                 }
+
+
+                else if (serviceType.equals("NotificationsService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONArray object = (JSONArray) obj;
+                    JSONObject ret = (JSONObject) object.get(0);
+
+                    if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "no notification.", Toast.LENGTH_LONG).show();
+                        homeIntent.putExtra("Notification_service", "null");
+                       // return;
+                    }
+
+                    //    Intent homeIntent = new Intent(Application.getAppContext(),
+                    //           HomeActivity.class);
+
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    homeIntent.putExtra("status", "lool you find");
+                    homeIntent.putExtra("Notification_service", "Notification");
+                    homeIntent.putExtra("Notification_arraysize", String.valueOf(object.size()));
+                    System.out.println("size " + object.size());
+                    homeIntent.putExtra("Notification_array", result);
+
+                    Application.getAppContext().startActivity(homeIntent);
+                }
+
+                else if (serviceType.equals("FriendList")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONArray object = (JSONArray) obj;
+                    JSONObject ret = (JSONObject) object.get(0);
+
+                    if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "There are no Friends.", Toast.LENGTH_LONG).show();
+                        homeIntent.putExtra("FriendList_service", "null");
+                         return;
+                    }
+
+                    //    Intent homeIntent = new Intent(Application.getAppContext(),
+                    //           HomeActivity.class);
+
+                 //   homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    homeIntent.putExtras(bundle);
+                    homeIntent.putExtra("status", "lool you find");
+                    homeIntent.putExtra("FriendList_service", "FriendList");
+                    homeIntent.putExtra("FriendList_arraysize", String.valueOf(object.size()));
+                    System.out.println("size " + object.size());
+                    homeIntent.putExtra("FriendList_array", result);
+
+                    Application.getAppContext().startActivity(homeIntent);
+                }
+
 
                 else if (serviceType.equals("viewrequestService")) {
                     //  Intent homeIntent = new Intent(Application.getAppContext(),
@@ -267,18 +382,18 @@ public class UserController {
 
                     if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
                         Toast.makeText(Application.getAppContext(), "No request found.", Toast.LENGTH_LONG).show();
+                        homeIntent.putExtra("viewrequest_service", "null");
                         return;
                     }
 
                     homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     homeIntent.putExtra("status", "ok");
-                    homeIntent.putExtra("service", "viewrequest");
-                    homeIntent.putExtra("arraysize", String.valueOf(object.size()));
+                    homeIntent.putExtra("viewrequest_service", "viewrequest");
+                    homeIntent.putExtra("viewrequest_arraysize", String.valueOf(object.size()));
                     System.out.println("size " + object.size());
-                    homeIntent.putExtra("array", result);
+                    homeIntent.putExtra("viewrequest_array", result);
 
-                    homeIntent.putExtra("vfriendname", ret.get("friend_name").toString());
-                    homeIntent.putExtra("vfriendid", ret.get("friend_id").toString());
+
                     Application.getAppContext().startActivity(homeIntent);
                 }
 
@@ -287,8 +402,8 @@ public class UserController {
                     //           HomeActivity.class);
                     homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     homeIntent.putExtra("status", "sending");
-                    homeIntent.putExtra("service", "sendrequest");
-                    Application.getAppContext().startActivity(homeIntent);
+                    homeIntent.putExtra("sendrequest_service", "sendrequest");
+                 //   Application.getAppContext().startActivity(homeIntent);
                 }
 
                 else if (serviceType.equals("acceptrequestService")) {
@@ -298,8 +413,25 @@ public class UserController {
 
                     homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     homeIntent.putExtra("status", "ok");
-                    homeIntent.putExtra("service", "acceptrequest");
-                    Application.getAppContext().startActivity(homeIntent);
+                    homeIntent.putExtra("viewrequest_service", "null");
+                    homeIntent.putExtra("acceptrequest_service", "acceptrequest");
+                   // Application.getAppContext().startActivity(homeIntent);
+                }
+                else if (serviceType.equals("SendMessageService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONObject object = (JSONObject) obj;
+
+                    if (!object.containsKey("Status") || object.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "Registration failed, Please try again.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                        Toast.makeText(Application.getAppContext(), "Message sent.", Toast.LENGTH_LONG).show();
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    homeIntent.putExtra("status", "ok");
+                    homeIntent.putExtra("sendmsgrequest_service", "SendMessage");
+                    // Application.getAppContext().startActivity(homeIntent);
                 }
 
             } catch (Exception e) {

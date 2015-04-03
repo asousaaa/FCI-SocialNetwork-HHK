@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabWidget;
@@ -27,7 +28,7 @@ public class HomeActivity extends FragmentActivity implements
     public static Bundle extras;
     private SharedPreferences shared;
     private int position = 0;
-
+    public static Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +36,17 @@ public class HomeActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        bundle =getIntent().getExtras();
+
+
         ActionBar ab= getActionBar();
         ab.hide();
         List<Fragment> fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(this, tab_home.class.getName()));
+       // fragments.add(Fragment.instantiate(this, tab_home.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_home.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_search.class.getName()));
-        fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
-        fragments.add(Fragment.instantiate(this, tab_setting.class.getName()));
-        fragments.add(Fragment.instantiate(this, tab_search.class.getName()));
+    //    fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
+      //  fragments.add(Fragment.instantiate(this, tab_search.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_setting.class.getName()));
 
@@ -57,7 +60,7 @@ public class HomeActivity extends FragmentActivity implements
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
 
-
+/*
         AddTab(this.mTabHost,
                 this.mTabHost.newTabSpec("Tab0")
                         .setIndicator(
@@ -65,13 +68,13 @@ public class HomeActivity extends FragmentActivity implements
                                 getResources().getDrawable(
                                         R.drawable.ic_action_web_site)));
 
-
+*/
         AddTab(this.mTabHost,
                 this.mTabHost.newTabSpec("Tab1")
                         .setIndicator(
                                 "",
                                 getResources().getDrawable(
-                                        R.drawable.ic_action_settings)));
+                                        R.drawable.ic_action_web_site)));
 
 
 
@@ -84,9 +87,9 @@ public class HomeActivity extends FragmentActivity implements
                         .setIndicator(
                                 "",
                                 getResources().getDrawable(
-                                        R.drawable.notfcation_icon)));
+                                        R.drawable.ic_action_search)));
 
-
+/*
         AddTab(this.mTabHost,
                 this.mTabHost.newTabSpec("Tab3")
                         .setIndicator(
@@ -100,7 +103,7 @@ public class HomeActivity extends FragmentActivity implements
                                 "",
                                 getResources().getDrawable(
                                         R.drawable.ic_action_search)));
-        AddTab(this.mTabHost,
+  */      AddTab(this.mTabHost,
                 this.mTabHost.newTabSpec("Tab5").setIndicator("",
                         getResources().getDrawable(R.drawable.ic_action_group)));
 
@@ -116,8 +119,18 @@ public class HomeActivity extends FragmentActivity implements
 
         shared = getSharedPreferences("social", MODE_PRIVATE);
         position = shared.getInt("pos", 0);
+
+
         mTabHost.setCurrentTab(position);
         mViewPager.setCurrentItem(position);
+        if(position>=4) {
+            Toast.makeText(getApplication(), "postion "+position, Toast.LENGTH_LONG).show();
+            HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
+            hsv.smoothScrollBy(200, 0);
+        }else{
+            HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
+            hsv.smoothScrollBy(-200, 0);
+        }
         if (extras.getString("service").equals("sendrequest")) {
             Toast.makeText(getApplication(), "Request send Successfully", Toast.LENGTH_LONG).show();
         }
@@ -142,6 +155,14 @@ public class HomeActivity extends FragmentActivity implements
 
         editor.putInt("pos", pos);
         editor.commit();
+
+        if(pos>=4) {
+            HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
+            hsv.smoothScrollBy(200, 0);
+        }else{
+            HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
+            hsv.smoothScrollBy(-200, 0);
+        }
 
         this.mViewPager.setCurrentItem(pos);
 

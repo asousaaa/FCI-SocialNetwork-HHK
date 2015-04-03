@@ -19,6 +19,7 @@
     android:layout_height="wrap_content"
     android:fillViewport="true"
     android:scrollbars="none"
+    android:id="@+id/hsv"
    >
             <TabWidget
                 android:id="@android:id/tabs"

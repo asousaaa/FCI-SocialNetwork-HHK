@@ -26,8 +26,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.FCI.SWE.Models.UserEntity;
-
+import com.FCI.SWE.Models.*;
 
 /**
  * This class contains REST services, also contains action function for web
@@ -41,16 +40,15 @@ import com.FCI.SWE.Models.UserEntity;
 @Path("/")
 @Produces("text/html")
 public class Service {
-	
-	
-	/*@GET
-	@Path("/index")
-	public Response index() {
-		return Response.ok(new Viewable("/jsp/entryPoint")).build();
-	}*/
 
+	/*
+	 * @GET
+	 * 
+	 * @Path("/index") public Response index() { return Response.ok(new
+	 * Viewable("/jsp/entryPoint")).build(); }
+	 */
 
-		/**
+	/**
 	 * Registration Rest service, this service will be called to make
 	 * registration. This function will store user data in data store
 	 * 
@@ -75,58 +73,87 @@ public class Service {
 
 	@POST
 	@Path("/RequestService")
-	public String requestService(@FormParam("friend_name")String friendname,
-			@FormParam("user_name")String username,
-			@FormParam("friend_id")String friendid,
+	public String requestService(@FormParam("friend_name") String friendname,
+			@FormParam("user_name") String username,
+			@FormParam("friend_id") String friendid,
 			@FormParam("user_id") String userid,
-			@FormParam("friend_accept") String faccept,
-			@FormParam("user_accept") String uaccept){
+			@FormParam("status") String status) {
 		UserEntity user = new UserEntity();
-		user.saveRequset(friendname,username,friendid,userid,faccept,uaccept);
+		user.saveRequset(friendname, username, friendid, userid, status);
 		JSONObject object = new JSONObject();
 		object.put("Status", "OK");
 		return object.toString();
 	}
-	
+
 	@POST
 	@Path("/viewrequestService")
 	public String viewrequestService(@FormParam("user_id")String user_id){
-		UserEntity user = new UserEntity();
-		user = user.viewRequset(user_id);
+		JSONObject ob = new JSONObject();
+		JSONArray array = new JSONArray();
+		ArrayList<UserEntity> user = UserEntity.viewRequset(user_id);
 		
+		if(user.size()==0){
+			ob.put("Status", "Failed");
+			 array.add(ob);
+		}
+		
+		for(int i=0;i<user.size();i++){
+			
+				
 		JSONObject object = new JSONObject();
 		object.put("Status", "OK");
-		object.put("friend_name",user.get_fname());
-		object.put("friend_id",user.getId());
-		object.put("user_id",user.get_userid());
+		object.put("friend_name",user.get(i).get_fname());
+		object.put("friend_id",user.get(i).getId());
+		object.put("user_id",user.get(i).get_userid());
+			array.add(object);
+		}
+		
+		return array.toString();
+	}
+
+	@POST
+	@Path("/acceptrequestService")
+	public String acceptrequestService(@FormParam("user_id") String user_id,
+			@FormParam("friend_id") String friend_id) {
+		UserEntity user = new UserEntity();
+
+		JSONObject object = new JSONObject();
+
+		if (user.acceptRequset(user_id, friend_id) == "accept") {
+			object.put("Status", "OK");
+		} else {
+			object.put("Status", "Failed");
+		}
+
 		return object.toString();
 	}
 	
 	@POST
-	@Path("/acceptrequestService")
-	public String acceptrequestService(@FormParam("user_id")String user_id,@FormParam("friend_id")String friend_id){
-		UserEntity user = new UserEntity();
-		
+	@Path("/SendMessageService")
+	public String SendMessageService(@FormParam("user_id") String user_id,
+			@FormParam("friend_id") String friend_id,@FormParam("user_name")String user_name,
+			@FormParam("friend_name") String friend_name , @FormParam("content") String content) {
+		Messages msg = new Messages();
+
 		JSONObject object = new JSONObject();
-		
-		if(user.acceptRequset(user_id,friend_id)=="accept"){
+
+		if (msg.sendmsg(user_id, friend_id,user_name,friend_name,content) == "accept") {
 			object.put("Status", "OK");
-		 }
-		else {
+		} else {
 			object.put("Status", "Failed");
 		}
-		
+
 		return object.toString();
 	}
-	
-	
-	
-	
+
 	/**
 	 * Login Rest Service, this service will be called to make login process
 	 * also will check user data and returns new user from datastore
-	 * @param uname provided user name
-	 * @param pass provided user password
+	 * 
+	 * @param uname
+	 *            provided user name
+	 * @param pass
+	 *            provided user password
 	 * @return user in json format
 	 */
 	@POST
@@ -135,32 +162,93 @@ public class Service {
 		JSONObject object = new JSONObject();
 		JSONArray array = new JSONArray();
 		ArrayList<UserEntity> user = UserEntity.searchforuser(sname);
-		if (user.size()==0) {
+
+		if (user.size() == 0) {
 			System.out.println("null");
 			object.put("Status", "Failed");
-			 array.add(object);
+			array.add(object);
 		} else {
-			
-			for(int i=0;i<user.size();i++){
-			//object.put("name", user.get(i));
+
+			for (int i = 0; i < user.size(); i++) {
+				// object.put("name", user.get(i));
 				JSONObject user1 = new JSONObject();
 				user1.put("Status", "OK");
 				user1.put("name", user.get(i).getName());
 				user1.put("email", user.get(i).getEmail());
 				user1.put("password", user.get(i).getPass());
-				user1.put("ID",user.get(i).getId());
-			    array.add(user1);
-			    System.out.println("ser "+ user.get(i).getName());
+				user1.put("ID", user.get(i).getId());
+				array.add(user1);
+				System.out.println("ser " + user.get(i).getName());
 			}
-			
-			
+
 		}
-System.out.println("size "+array.size());
+		System.out.println("size " + array.size());
 		return array.toJSONString();
 
 	}
 	
 	
+	@POST
+	@Path("/NotificationsService")
+	public String NotificationsService(@FormParam("userid") String user_id) {
+		JSONObject object = new JSONObject();
+		JSONArray array = new JSONArray();
+		ArrayList<Notifications> not= Notifications.Notifiy(user_id);
+
+		if (not.size() == 0) {
+			System.out.println("null");
+			object.put("Status", "Failed");
+			array.add(object);
+		} else {
+
+			for (int i = 0; i < not.size(); i++) {
+				// object.put("name", user.get(i));
+				JSONObject not1 = new JSONObject();
+				not1.put("Status", "OK");
+				not1.put("friend_name", not.get(i).getFriend_name());
+				not1.put("not_id", not.get(i).getN_id());
+				not1.put("type", not.get(i).getType());
+				array.add(not1);
+			
+			}
+
+		}
+		System.out.println("size " + array.size());
+		return array.toJSONString();
+
+	}
+	
+	
+	@POST
+	@Path("/FriendList")
+	public String FriendList(@FormParam("userid") String user_id) {
+		JSONObject object = new JSONObject();
+		JSONArray array = new JSONArray();
+		ArrayList<Friends> fri= Friends.Friendlist(user_id);
+
+		if (fri.size() == 0) {
+			System.out.println("null");
+			object.put("Status", "Failed");
+			array.add(object);
+		} else {
+
+			for (int i = 0; i < fri.size(); i++) {
+				// object.put("name", user.get(i));
+				JSONObject frined = new JSONObject();
+				frined.put("Status", "OK");
+				frined.put("friend_name", fri.get(i).getName());
+				frined.put("friend_id", fri.get(i).getId());
+				
+				array.add(frined);
+			
+			}
+
+		}
+		System.out.println("size " + array.size());
+		return array.toJSONString();
+
+	}
+
 	@POST
 	@Path("/LoginService")
 	public String loginService(@FormParam("uname") String uname,
@@ -175,7 +263,7 @@ System.out.println("size "+array.size());
 			object.put("name", user.getName());
 			object.put("email", user.getEmail());
 			object.put("password", user.getPass());
-			object.put("ID",user.getId());
+			object.put("ID", user.getId());
 		}
 
 		return object.toString();
