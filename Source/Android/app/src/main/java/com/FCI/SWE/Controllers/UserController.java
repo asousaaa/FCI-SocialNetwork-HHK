@@ -37,7 +37,7 @@ public class UserController {
 	private UserController() {
 
 	}
-
+/* get active user information */
     public String GetActiveUserName(){
         return  currentActiveUser.getName().toString();
     }
@@ -53,8 +53,8 @@ public class UserController {
     public String GetActiveUserPass(){
         return  currentActiveUser.getPass().toString();
     }
-
-	public  void login(String userName, String password) {
+/* functions call service to excute*/
+	public void login(String userName, String password) {
 
 		new Connection().execute(
 				"http://fci-sn-hhk.appspot.com/rest/LoginService", userName,
@@ -95,7 +95,7 @@ public class UserController {
                 friendId, "acceptrequestService");
     }
 
-
+/* establish connection to get functions  according to  service type*/
 
 	static private class Connection extends AsyncTask<String, String, String> {
 
@@ -166,7 +166,7 @@ public class UserController {
 			return null;
 
 		}
-
+/* what to do after finish calling and excuting */
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
