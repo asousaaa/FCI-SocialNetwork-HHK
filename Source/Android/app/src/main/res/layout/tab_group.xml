@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#65ffffff"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/Group_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_blue_dark"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/grouptext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+
+                android:text="Group Chat list"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/create_group"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/grouptext"
+                android:layout_alignParentEnd="true"
+                android:text="Create"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/grouptext"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_action_expand" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/Group_View"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/friend_header"
+            android:background="#bcffffff">
+
+
+            <TableLayout
+                android:id="@+id/grouptable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+            </TableLayout>
+        </ScrollView>
+
+
+    </RelativeLayout>
+</ScrollView>

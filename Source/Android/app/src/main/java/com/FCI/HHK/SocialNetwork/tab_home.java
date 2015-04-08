@@ -41,6 +41,7 @@ public class tab_home extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View V = inflater.inflate(R.layout.tab_home, container, false);
         out= (Button) V.findViewById(R.id.Logout);
+        out.setId(0);
         out.setOnClickListener(this);
 
         String name = "", welcome = "";
@@ -54,30 +55,27 @@ public class tab_home extends Fragment implements View.OnClickListener {
         String text = welcome;
         helloTextView.setText(text);
 
-        if (HomeActivity.extras.getString("service").equals("Notification")) {
+        if (HomeActivity.extras.getString("Notification_service").equals("Notification")) {
             ll = (TableLayout) V.findViewById(R.id.notcation);
-            int size = Integer.valueOf(HomeActivity.extras.getString("arraysize"));
+            int size = Integer.valueOf(HomeActivity.extras.getString("Notification_arraysize"));
 
             try {
                 JSONParser parser = new JSONParser();
-                Object obj = parser.parse(HomeActivity.extras.getString("array"));
+                Object obj = parser.parse(HomeActivity.extras.getString("Notification_array"));
                 JSONArray object = (JSONArray) obj;
                 for (int i = 1; i <= size; i++) {
                     JSONObject ret = (JSONObject) object.get(i - 1);
 
-
-                    bt[i].setTextSize(25);
-                    bt[i].setId(Integer.valueOf("1"));
+                    bt[i]= new Button(getActivity());
+                    System.out.println("enter"+ret.get("not_id")+" "+ret.get("type"));
+                    bt[i].setTextSize(Float.parseFloat("25"));
+                    bt[i].setId(Integer.valueOf(ret.get("not_id").toString()));
                     bt[i].setGravity(Gravity.CENTER);
                     int color = Color.argb(100, 80, 180, 255);
                     bt[i].setBackgroundColor(color);
-                    if(ret.get("type").equals("request")) {
-                        bt[i].setText(ret.get("friend_name").toString()+" send you request");
-                    }
-                    else{
-                        bt[i].setText(ret.get("friend_name").toString()+" accept your request");
-                    }
-                    bt[i].setId(Integer.valueOf(ret.get("not_id").toString()));
+
+                    bt[i].setText(ret.get("type").toString());
+                  //  bt[i].setId(Integer.valueOf(ret.get("not_id").toString()));
                     ll.addView(bt[i]);
 
                     bt[i].setOnClickListener(this);
@@ -92,16 +90,17 @@ public class tab_home extends Fragment implements View.OnClickListener {
     }
 
     public void onClick(View v) {
+        System.out.println(v.getId());
         if(v.getId()==0) {
             UserController controller = Application.getUserController();
             controller.logout();
         }
-      /*  else {
+       else {
 
             Button b = (Button) v.findViewById(v.getId());
         ll.removeView(b);
             System.out.println(b.getText());
-        }*/
+        }
     }
 
 

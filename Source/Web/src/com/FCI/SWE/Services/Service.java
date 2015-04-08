@@ -187,10 +187,51 @@ public class Service {
 
 	}
 	
+
+	@POST
+	@Path("/CreateGroupChatService")
+	public String CreateGroupChatService(@FormParam("gname") String Gname,@FormParam("owner") String owner,
+		@FormParam("names") String names,@FormParam("ides") String ides) {
+		/*
+		ArrayList Senders = new ArrayList();
+		Senders.add("hsan");
+		Senders.add("khaled");
+		Senders.add("khaled");
+		
+		ArrayList ides = new ArrayList();
+		ides.add("2");
+		ides.add("3");
+		ides.add("4");
+		
+		String name="test_group",owner="hosam";  */
+		JSONObject object = new JSONObject();
+		object.put("Status", "OK");
+		Chat c = new Chat() ;
+		if(! c.CreateChatGroup(Gname, owner, names, ides)){
+				object.put("Status", "Failed");
+		}
+		else {
+		object.put("Status", "OK");
+		}
+		return object.toString();
+
+	}
+
+	@POST
+	@Path("/MsgChatGroupService")
+	public boolean MsgChatGroup() {
+		
+		
+		Chat c = new Chat() ;
+		c.MsgChatGroup("test_group", "hosam","hello to chat group");
+
+		return true;
+
+	}
 	
 	@POST
 	@Path("/NotificationsService")
-	public String NotificationsService(@FormParam("userid") String user_id) {
+	public String NotificationsService(@FormParam("userid") String user_id) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		JSONObject object = new JSONObject();
 		JSONArray array = new JSONArray();
 		ArrayList<Notifications> not= Notifications.Notifiy(user_id);
@@ -205,9 +246,12 @@ public class Service {
 				// object.put("name", user.get(i));
 				JSONObject not1 = new JSONObject();
 				not1.put("Status", "OK");
+				not1.put("user_name", not.get(i).getUser_name());
+				not1.put("user_id", not.get(i).getUser_id());
 				not1.put("friend_name", not.get(i).getFriend_name());
-				not1.put("not_id", not.get(i).getN_id());
+				not1.put("not_id", not.get(i).getNot_id());
 				not1.put("type", not.get(i).getType());
+				not1.put("note", not.get(i).getNote());
 				array.add(not1);
 			
 			}

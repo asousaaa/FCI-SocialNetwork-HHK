@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.*;
@@ -29,7 +30,7 @@ public class UserController {
     private int position = 0;
     HomeActivity h = new HomeActivity();
     public static Bundle bundle;
-    //position = shared.getInt("pos", 0);
+    public static boolean creategroup=false;
     static Intent homeIntent = new Intent(Application.getAppContext(),
             HomeActivity.class);
 
@@ -83,6 +84,11 @@ public class UserController {
 
     }
 
+    public void CreateGroupChat(String groupname,String username,String names,String ides){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/CreateGroupChatService", groupname,
+                username,names,ides, "CreateGroupChatService");
+    }
     public void sendmessage(String userid,String friendid,String username,String friendname,String msg) {
 
         new Connection().execute(
@@ -169,6 +175,11 @@ public class UserController {
             }else if (serviceType.equals("SendMessageService")) {
                 urlParameters = "user_id=" + params[1]+"&friend_id="+params[2]+
                         "&user_name=" + params[3]+"&friend_name="+params[4]+"&content="+params[5];
+            }else if (serviceType.equals("NotificationsService")) {
+                urlParameters = "userid=" + params[1];
+            }else if (serviceType.equals("CreateGroupChatService")) {
+                urlParameters = "gname=" + params[1]+"&owner="+params[2]+
+                        "&names=" + params[3]+"&ides="+params[4];
             }
 
 
@@ -249,7 +260,7 @@ public class UserController {
                     homeIntent.putExtra("viewrequest_service", "null");
                     homeIntent.putExtra("sendrequest_service", "null");
                     homeIntent.putExtra("acceptrequest_service", "null");
-//                    userController.Notification(currentActiveUser.getID());
+                   userController.Notification(currentActiveUser.getID());
                     Application.getAppContext().startActivity(homeIntent);
                 }
 
@@ -433,6 +444,26 @@ public class UserController {
                     homeIntent.putExtra("sendmsgrequest_service", "SendMessage");
                     // Application.getAppContext().startActivity(homeIntent);
                 }
+                else if (serviceType.equals("CreateGroupChatService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONObject object = (JSONObject) obj;
+
+                    if (!object.containsKey("Status") || object.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "Create group failed, Please try again.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    Toast.makeText(Application.getAppContext(), "Group created successfully.", Toast.LENGTH_LONG).show();
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    homeIntent.putExtra("status", "ok");
+                    homeIntent.putExtra("CreateGroupChat_service", "CreateGroupChat");
+                    // Application.getAppContext().startActivity(homeIntent);
+                }
+
+
+
+
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block

@@ -46,7 +46,7 @@ public class HomeActivity extends FragmentActivity implements
         fragments.add(Fragment.instantiate(this, tab_home.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_search.class.getName()));
     //    fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
-      //  fragments.add(Fragment.instantiate(this, tab_search.class.getName()));
+        fragments.add(Fragment.instantiate(this, tab_group.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_setting.class.getName()));
 
@@ -96,19 +96,19 @@ public class HomeActivity extends FragmentActivity implements
                                 "",
                                 getResources().getDrawable(
                                         R.drawable.ic_action_person)));
-
+*/
         AddTab(this.mTabHost,
-                this.mTabHost.newTabSpec("Tab4")
+                this.mTabHost.newTabSpec("Tab3")
                         .setIndicator(
                                 "",
                                 getResources().getDrawable(
-                                        R.drawable.ic_action_search)));
-  */      AddTab(this.mTabHost,
-                this.mTabHost.newTabSpec("Tab5").setIndicator("",
-                        getResources().getDrawable(R.drawable.ic_action_group)));
+                                        R.drawable.ic_action_group)));
+        AddTab(this.mTabHost,
+                this.mTabHost.newTabSpec("Tab4").setIndicator("",
+                        getResources().getDrawable(R.drawable.ic_action_add_person)));
 
         AddTab(this.mTabHost,
-                this.mTabHost.newTabSpec("Tab6").setIndicator(
+                this.mTabHost.newTabSpec("Tab5").setIndicator(
                         "",
                         getResources().getDrawable(
                                 R.drawable.ic_action_about)));
@@ -124,7 +124,7 @@ public class HomeActivity extends FragmentActivity implements
         mTabHost.setCurrentTab(position);
         mViewPager.setCurrentItem(position);
         if(position>=4) {
-            Toast.makeText(getApplication(), "postion "+position, Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplication(), "postion "+position, Toast.LENGTH_LONG).show();
             HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
             hsv.smoothScrollBy(200, 0);
         }else{

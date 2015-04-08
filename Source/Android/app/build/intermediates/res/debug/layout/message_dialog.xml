@@ -21,7 +21,8 @@
         android:id="@+id/messagecontent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="5">
+        android:minLines="5"
+        android:maxLines="10">
 
         <requestFocus />
 

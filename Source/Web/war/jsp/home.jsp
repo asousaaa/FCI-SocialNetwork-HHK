@@ -24,4 +24,9 @@ name : <input name="searchname" type="text" />
 <input name="signout" type="submit" value="view request"/>
 </form>
 
+<form action="notifiy" method="post">
+<input type="hidden" value="1" name="userid" />
+<input name="signout" type="submit" value="notifcation"/>
+</form>
+
 </html>

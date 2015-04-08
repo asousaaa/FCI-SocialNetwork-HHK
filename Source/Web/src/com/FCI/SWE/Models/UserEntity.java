@@ -258,7 +258,8 @@ public class UserEntity {
 		eme.setProperty("friend_id", fre_id);
 		eme.setProperty("user_name", user_name);
 		eme.setProperty("user_id", user_id);
-		eme.setProperty("type", "request");
+		eme.setProperty("type", "Notifiy_Request");
+		eme.setProperty("note", "request");
 		datastore.put(eme);
 		return true;
 
@@ -320,9 +321,9 @@ public class UserEntity {
 				eme.setProperty("friend_name", entity.getProperty("friend_name"));
 				eme.setProperty("friend_id", friend_id);
 				eme.setProperty("user_name", entity.getProperty("user_name"));
-				
+				eme.setProperty("note", "accept");
 				eme.setProperty("user_id", user_id);
-				eme.setProperty("type", "accept");
+				eme.setProperty("type", "Notifiy_Request");
 				datastore.put(eme);
 				
 				return "accept";
@@ -344,7 +345,9 @@ public class UserEntity {
 				eme.setProperty("friend_name", entity.getProperty("user_name").toString());
 				eme.setProperty("user_id", friend_id);
 				eme.setProperty("user_name", entity.getProperty("friend_name"));
-				eme.setProperty("type", "accept");
+				eme.setProperty("type", "Notifiy_Request");
+				eme.setProperty("note", "accept");
+
 				datastore.put(eme);
 				return "accept";
 			}

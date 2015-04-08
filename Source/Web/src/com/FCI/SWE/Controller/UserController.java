@@ -45,8 +45,8 @@ public class UserController {
 	 * 
 	 * @return sign up page
 	 */
-	public String service_url="http://fci-sn-hhk.appspot.com/rest/";
-//	public String service_url="http://localhost:8888/rest/";
+//	public String service_url="http://fci-sn-hhk.appspot.com/rest/";
+	public String service_url="http://localhost:8888/rest/";
 	
 	@GET
 	@Path("/signup")
@@ -55,7 +55,99 @@ public class UserController {
 		return Response.ok(new Viewable("/jsp/register")).build();
 	}
 	
+	@GET
+	@Path("/CreateGroupChatService")
+	@Produces("text/html")
+	public String  CGCS() {
+		String serviceUrl = service_url+"CreateGroupChatService";
+		
+		
+		try {
+			URL url = new URL(serviceUrl);
+			String urlParameters = "";
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setConnectTimeout(60000);  //60 Seconds
+			connection.setReadTimeout(60000);  //60 Seconds
+			
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStreamWriter writer = new OutputStreamWriter(
+					connection.getOutputStream());
+			writer.write(urlParameters);
+			writer.flush();
+			String line, retJson = "";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
 
+			while ((line = reader.readLine()) != null) {
+				retJson += line;
+			}
+			writer.close();
+			reader.close();
+		}
+		catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "done";
+	}
+
+	@GET
+	@Path("/MsgChatGroupService")
+	@Produces("text/html")
+	public String  MCGS() {
+		String serviceUrl = service_url+"MsgChatGroupService";
+		
+		
+		try {
+			URL url = new URL(serviceUrl);
+			String urlParameters = "";
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setConnectTimeout(60000);  //60 Seconds
+			connection.setReadTimeout(60000);  //60 Seconds
+			
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStreamWriter writer = new OutputStreamWriter(
+					connection.getOutputStream());
+			writer.write(urlParameters);
+			writer.flush();
+			String line, retJson = "";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+
+			while ((line = reader.readLine()) != null) {
+				retJson += line;
+			}
+			writer.close();
+			reader.close();
+		}
+		catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "send mesg to chat";
+	}
+
+	
 	/**
 	 * Action function to render home page of application, home page contains
 	 * only signup and login buttons
@@ -162,7 +254,70 @@ public class UserController {
 	}
 	
 	
-	
+	@POST
+	@Path("/notifiy")
+	@Produces("text/html")
+	public Response notifiy(@FormParam("userid") String uid) {
+		
+
+			String serviceUrl = service_url+"NotificationsService";
+		
+			
+			try {
+				URL url = new URL(serviceUrl);
+				String urlParameters = "userid=" + uid ;
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setDoInput(true);
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestMethod("POST");
+				connection.setConnectTimeout(60000);  //60 Seconds
+				connection.setReadTimeout(60000);  //60 Seconds
+				
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStreamWriter writer = new OutputStreamWriter(
+						connection.getOutputStream());
+				writer.write(urlParameters);
+				writer.flush();
+				String line, retJson = "";
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				while ((line = reader.readLine()) != null) {
+					retJson += line;
+				}
+				writer.close();
+				reader.close();
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse(retJson);
+				
+				JSONArray object = (JSONArray) obj;
+				JSONObject result= (JSONObject) object.get(0);
+				
+				if (result.get("Status").equals("Ok")){
+				System.out.println("looool");
+					return Response.ok(new Viewable("/jsp/request")).build();
+				}
+				
+				
+				
+				
+	}
+	 catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+	return null;	
+	}
 	@POST
 	@Path("/search")
 	@Produces("text/html")

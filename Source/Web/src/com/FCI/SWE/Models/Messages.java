@@ -63,7 +63,20 @@ public class Messages {
 		employee.setProperty("content", content);
 		datastore.put(employee);
 		
+		Query Q= new Query("Notifications");
+		PreparedQuery p = datastore.prepare(Q);
+		List<Entity> lists = p.asList(FetchOptions.Builder.withDefaults());
+
+		Entity eme = new Entity("Notifications", lists.size() + 2);
+		eme.setProperty("friend_name", fre_name);
+		eme.setProperty("friend_id", fre_id);
+		eme.setProperty("user_name", user_name);
+		eme.setProperty("note", "accept");
+		eme.setProperty("user_id", user_id);
+		eme.setProperty("type", "Notifiy_Message");
+		eme.setProperty("note", "empty");
 		
+		datastore.put(eme);
 		
 		return "accept";
 	}
