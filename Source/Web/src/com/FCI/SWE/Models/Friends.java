@@ -25,6 +25,7 @@ public class Friends {
 		this.id = id;
 	}
 	
+	Friends(){}
 
 
 public Friends(String name, String id) {

@@ -102,6 +102,53 @@ public class UserController {
 	}
 
 	@GET
+	@Path("/CreatePostServic")
+	@Produces("text/html")
+	public String  newpost() {
+		String serviceUrl = service_url+"CreatePostService";
+		
+	
+		try {
+			URL url = new URL(serviceUrl);
+			String urlParameters = "user=hosam&UID=2&feeling=happy&content=newpost&type=user";
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setConnectTimeout(60000);  //60 Seconds
+			connection.setReadTimeout(60000);  //60 Seconds
+			
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStreamWriter writer = new OutputStreamWriter(
+					connection.getOutputStream());
+			writer.write(urlParameters);
+			writer.flush();
+			String line, retJson = "";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+
+			while ((line = reader.readLine()) != null) {
+				retJson += line;
+			}
+			writer.close();
+			reader.close();
+		}
+		catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "done";
+	}
+
+	
+	@GET
 	@Path("/MsgChatGroupService")
 	@Produces("text/html")
 	public String  MCGS() {

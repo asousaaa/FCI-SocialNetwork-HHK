@@ -87,27 +87,26 @@ public class Service {
 
 	@POST
 	@Path("/viewrequestService")
-	public String viewrequestService(@FormParam("user_id")String user_id){
+	public String viewrequestService(@FormParam("user_id") String user_id) {
 		JSONObject ob = new JSONObject();
 		JSONArray array = new JSONArray();
 		ArrayList<UserEntity> user = UserEntity.viewRequset(user_id);
-		
-		if(user.size()==0){
+
+		if (user.size() == 0) {
 			ob.put("Status", "Failed");
-			 array.add(ob);
+			array.add(ob);
 		}
-		
-		for(int i=0;i<user.size();i++){
-			
-				
-		JSONObject object = new JSONObject();
-		object.put("Status", "OK");
-		object.put("friend_name",user.get(i).get_fname());
-		object.put("friend_id",user.get(i).getId());
-		object.put("user_id",user.get(i).get_userid());
+
+		for (int i = 0; i < user.size(); i++) {
+
+			JSONObject object = new JSONObject();
+			object.put("Status", "OK");
+			object.put("friend_name", user.get(i).get_fname());
+			object.put("friend_id", user.get(i).getId());
+			object.put("user_id", user.get(i).get_userid());
 			array.add(object);
 		}
-		
+
 		return array.toString();
 	}
 
@@ -127,17 +126,19 @@ public class Service {
 
 		return object.toString();
 	}
-	
+
 	@POST
 	@Path("/SendMessageService")
 	public String SendMessageService(@FormParam("user_id") String user_id,
-			@FormParam("friend_id") String friend_id,@FormParam("user_name")String user_name,
-			@FormParam("friend_name") String friend_name , @FormParam("content") String content) {
+			@FormParam("friend_id") String friend_id,
+			@FormParam("user_name") String user_name,
+			@FormParam("friend_name") String friend_name,
+			@FormParam("content") String content) {
 		Messages msg = new Messages();
 
 		JSONObject object = new JSONObject();
 
-		if (msg.sendmsg(user_id, friend_id,user_name,friend_name,content) == "accept") {
+		if (msg.sendmsg(user_id, friend_id, user_name, friend_name, content) == "accept") {
 			object.put("Status", "OK");
 		} else {
 			object.put("Status", "Failed");
@@ -186,32 +187,20 @@ public class Service {
 		return array.toJSONString();
 
 	}
-	
 
 	@POST
 	@Path("/CreateGroupChatService")
-	public String CreateGroupChatService(@FormParam("gname") String Gname,@FormParam("owner") String owner,
-		@FormParam("names") String names,@FormParam("ides") String ides) {
-		/*
-		ArrayList Senders = new ArrayList();
-		Senders.add("hsan");
-		Senders.add("khaled");
-		Senders.add("khaled");
-		
-		ArrayList ides = new ArrayList();
-		ides.add("2");
-		ides.add("3");
-		ides.add("4");
-		
-		String name="test_group",owner="hosam";  */
+	public String CreateGroupChatService(@FormParam("gname") String Gname,
+			@FormParam("owner") String owner, @FormParam("names") String names,
+			@FormParam("ides") String ides) {
+
 		JSONObject object = new JSONObject();
 		object.put("Status", "OK");
-		Chat c = new Chat() ;
-		if(! c.CreateChatGroup(Gname, owner, names, ides)){
-				object.put("Status", "Failed");
-		}
-		else {
-		object.put("Status", "OK");
+		Chat c = new Chat();
+		if (!c.CreateChatGroup(Gname, owner, names, ides)) {
+			object.put("Status", "Failed");
+		} else {
+			object.put("Status", "OK");
 		}
 		return object.toString();
 
@@ -219,22 +208,87 @@ public class Service {
 
 	@POST
 	@Path("/MsgChatGroupService")
-	public boolean MsgChatGroup() {
-		
-		
-		Chat c = new Chat() ;
-		c.MsgChatGroup("test_group", "hosam","hello to chat group");
+	public String MsgChatGroup(@FormParam("gid") String Gid,
+			@FormParam("sender") String sender, @FormParam("msg") String content) {
 
-		return true;
+		Chat c = new Chat();
+		JSONObject object = new JSONObject();
+		if (!c.MsgChatGroup(Gid, sender, content)) {
+			object.put("Status", "Failed");
+		} else {
+			object.put("Status", "OK");
+		}
+		return object.toString();
 
 	}
-	
+
+	@POST
+	@Path("/ViewChatGroupService")
+	public String viewChatGroup(@FormParam("user_id") String userid)
+			throws ParseException {
+
+		Chat c = new Chat();
+		ArrayList<Chat> group = c.ViewChatGroup(userid);
+
+		JSONArray array = new JSONArray();
+		JSONObject object = new JSONObject();
+		if (group == null) {
+			object.put("Status", "Failed");
+			array.add(object);
+			return array.toJSONString();
+		}
+		for (int i = 0; i < group.size(); i++) {
+			object = new JSONObject();
+			object.put("Status", "Ok");
+			object.put("chatid", group.get(i).getChat_id());
+			object.put("groupname", group.get(i).getChat_name());
+			object.put("member", group.get(i).getSenders());
+			array.add(object);
+		}
+
+		return array.toJSONString();
+	}
+
+	@POST
+	@Path("/ViewMsgChatGroupService")
+	public String viewMsgChatGroup(@FormParam("GroupId") String id)
+			throws ParseException {
+
+		Chat c = new Chat();
+		ArrayList<Chat> group = c.ViewMsgChatGroup(id);
+
+		JSONArray array = new JSONArray();
+		JSONObject object = new JSONObject();
+		if (group.size() == 0) {
+			object.put("Status", "Failed");
+			object.put("chatid", id);
+			array.add(object);
+
+			return array.toJSONString();
+
+		}
+		for (int i = 0; i < group.size(); i++) {
+			object = new JSONObject();
+			object.put("Status", "Ok");
+			object.put("chatname", group.get(i).getChat_name());
+			object.put("chatid", id);
+			object.put("content", group.get(i).getMsg());
+			object.put("sender", group.get(i).getSender());
+			array.add(object);
+
+		}
+
+		return array.toJSONString();
+	}
+
 	@POST
 	@Path("/NotificationsService")
-	public String NotificationsService(@FormParam("userid") String user_id) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public String NotificationsService(@FormParam("userid") String user_id)
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 		JSONObject object = new JSONObject();
 		JSONArray array = new JSONArray();
-		ArrayList<Notifications> not= Notifications.Notifiy(user_id);
+		ArrayList<Notifications> not = Notifications.Notifiy(user_id);
 
 		if (not.size() == 0) {
 			System.out.println("null");
@@ -253,7 +307,7 @@ public class Service {
 				not1.put("type", not.get(i).getType());
 				not1.put("note", not.get(i).getNote());
 				array.add(not1);
-			
+
 			}
 
 		}
@@ -261,14 +315,13 @@ public class Service {
 		return array.toJSONString();
 
 	}
-	
-	
+
 	@POST
 	@Path("/FriendList")
 	public String FriendList(@FormParam("userid") String user_id) {
 		JSONObject object = new JSONObject();
 		JSONArray array = new JSONArray();
-		ArrayList<Friends> fri= Friends.Friendlist(user_id);
+		ArrayList<Friends> fri = Friends.Friendlist(user_id);
 
 		if (fri.size() == 0) {
 			System.out.println("null");
@@ -282,9 +335,9 @@ public class Service {
 				frined.put("Status", "OK");
 				frined.put("friend_name", fri.get(i).getName());
 				frined.put("friend_id", fri.get(i).getId());
-				
+
 				array.add(frined);
-			
+
 			}
 
 		}
@@ -314,4 +367,149 @@ public class Service {
 
 	}
 
+	@POST
+	@Path("/CreatenewpageService")
+	public String CreatenewPageService(@FormParam("owner") String owner,
+			@FormParam("name") String name,
+			@FormParam("cateagory") String cateagory)
+			{
+		JSONObject object = new JSONObject();
+
+		page P = new page();
+		if (P.newpage(owner,name, cateagory) != "done") {
+			object.put("Status", "Failed");
+		} else {
+			object.put("Status", "OK");
+		}
+		return object.toString();
+
+	}
+
+	
+	@POST
+	@Path("/CreatePostService")
+	public String CreatePostService(@FormParam("user") String user_name,
+			@FormParam("UID") String user_ID,
+			@FormParam("feeling") String feeling,
+			@FormParam("content") String content, @FormParam("type") String type) {
+
+		System.out.print(user_name);
+		JSONObject object = new JSONObject();
+
+		Post P = new Post();
+		if (P.newpost(user_ID, user_name, feeling, content, type) != "post") {
+			object.put("Status", "Failed");
+		} else {
+			object.put("Status", "OKjjjjjj");
+		}
+		return object.toString();
+
+	}
+
+	@POST
+	@Path("/CreatePostPageService")
+	public String CreatePostPageService(@FormParam("PID") String ID,
+			@FormParam("UID") String uid,
+			@FormParam("UNAME") String name,
+			@FormParam("feeling") String feeling,
+			@FormParam("content") String content
+			) {
+
+		JSONObject object = new JSONObject();
+
+		page P = new page();
+		if (P.newpagepost(ID,uid, name, feeling, content) != "page") {
+			object.put("Status", "Failed");
+		} else {
+			object.put("Status", "OK");
+		}
+		return object.toString();
+
+	}
+	
+	@POST
+	@Path("/ViewUserPostService")
+	public String ViewUserPostService(@FormParam("user_id") String ID) {
+
+		JSONArray array = new JSONArray();
+		JSONObject object;
+		Post p = new Post();
+
+		ArrayList<Post> post = p.ViewPosts(ID);
+
+		if(post.size() == 0){
+			object = new JSONObject();
+			object.put("Status", "Failed");
+			return array.toJSONString();
+		}
+		
+		for (int i = 0; i < post.size(); i++) {
+			object = new JSONObject();
+			object.put("Status", "OK");
+			object.put("user_name", post.get(i).getUser_name());
+			object.put("user_id", post.get(i).getUser_ID());
+			object.put("content", post.get(i).getContent());
+			object.put("type", post.get(i).getType());
+			object.put("feeling", post.get(i).getFeelings());
+			array.add(object);
+		}
+
+		return array.toJSONString();
+	}
+
+	@POST
+	@Path("/ViewpostpageService")
+	public String ViewPagePostService(@FormParam("page_id") String ID) {
+
+		JSONArray array = new JSONArray();
+		JSONObject object;
+		page p = new page();
+
+		ArrayList<page> post = p.ViewPosts(ID);
+		
+		if(post.size() == 0){
+			object = new JSONObject();
+			object.put("Status", "Failed");
+			return array.toJSONString();
+		}
+
+		for (int i = 0; i < post.size(); i++) {
+			object = new JSONObject();
+			object.put("page_name", post.get(i).getUser_name());
+			object.put("page_id", post.get(i).getUser_ID());
+			object.put("content", post.get(i).getContent());
+			object.put("type", post.get(i).getType());
+			object.put("feeling", post.get(i).getFeelings());
+			array.add(object);
+		}
+
+		return array.toJSONString();
+	}
+
+	@POST
+	@Path("/SearchPageService")
+	public String SearchPageService(@FormParam("name") String name,@FormParam("type") String type) {
+
+		JSONArray array = new JSONArray();
+		JSONObject object;
+		page p = new page();
+
+		ArrayList<page> page = p.PageSearch(name, type);
+
+		for (int i = 0; i < page.size(); i++) {
+			object = new JSONObject();
+			object.put("Status", "OK");
+			object.put("page_name", page.get(i).getPage_name());
+			object.put("page_owner", page.get(i).getPage_owner());
+			object.put("cateagory", page.get(i).getCategory());
+			object.put("numoflikes", page.get(i).getNumoflikes());
+			
+			array.add(object);
+		}
+
+		return array.toJSONString();
+	}
+
+	
 }
+
