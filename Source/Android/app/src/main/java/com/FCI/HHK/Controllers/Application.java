@@ -5,6 +5,8 @@ import android.content.Context;
 public class Application extends android.app.Application {
 
     private static Context context;
+    public static Context Homecontext,NewsFeedActivity;
+
     private static UserController userController;
 
     public void onCreate() {

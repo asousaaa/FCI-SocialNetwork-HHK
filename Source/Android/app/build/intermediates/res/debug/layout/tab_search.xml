@@ -36,7 +36,7 @@
                 android:layout_toStartOf="@+id/searchbutton"
                 android:hint="User Name"
                 android:inputType="text"
-                android:text="ahmed" />
+                />
 
             <ImageButton
                 android:id="@+id/searchbutton"
@@ -129,4 +129,4 @@
 
 
     </RelativeLayout>
-</ScrollView><!-- From: file:/C:/Users/Khaled/Desktop/SW_Project/FCI-SocialNetwork-HHK/Source/Android/app/src/main/res/layout/tab_search.xml -->
+</ScrollView><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_search.xml -->

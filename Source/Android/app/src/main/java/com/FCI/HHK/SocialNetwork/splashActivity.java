@@ -35,12 +35,11 @@ public class splashActivity extends Activity {
                 UserController controller = Application.getUserController();
                 controller.login(shared.getString("loginname", ""), shared.getString("loginpass", ""));
 
-            }else{
-                    Intent i = new Intent(splashActivity.this, MainActivity.class);
-                    startActivity(i);
-                }
+            } else {
+                Intent i = new Intent(splashActivity.this, MainActivity.class);
+                startActivity(i);
             }
-        else{
+        } else {
             Intent i = new Intent(splashActivity.this, MainActivity.class);
             startActivity(i);
         }

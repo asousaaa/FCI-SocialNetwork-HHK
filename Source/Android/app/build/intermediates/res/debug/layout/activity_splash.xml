@@ -2,18 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/splash3"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.FCI.HHK.SocialNetwork.splashActivity"
-    android:background="@drawable/splash3">
+    tools:context="com.FCI.HHK.SocialNetwork.splashActivity">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
         android:layout_centerInParent="true"
         android:src="@drawable/splash" />
 </RelativeLayout>
-<!-- From: file:/C:/Users/Khaled/Desktop/SW_Project/FCI-SocialNetwork-HHK/Source/Android/app/src/main/res/layout/activity_splash.xml -->
+<!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/activity_splash.xml -->

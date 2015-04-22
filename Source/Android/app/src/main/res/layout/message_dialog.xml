@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1">
 
 
@@ -9,20 +10,19 @@
         android:id="@+id/titel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="New message"
         android:background="@android:color/holo_blue_dark"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:gravity="center_horizontal"
         android:padding="10dp"
-        />
+        android:text="New message"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
     <EditText
         android:id="@+id/messagecontent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="5"
-        android:maxLines="10">
+        android:maxLines="10"
+        android:minLines="5">
 
         <requestFocus />
 

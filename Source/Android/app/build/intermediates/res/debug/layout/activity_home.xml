@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/splash3">
+    android:background="@drawable/splash3"
+    android:orientation="vertical">
 
     <TabHost
         android:id="@android:id/tabhost"
@@ -11,24 +11,25 @@
         android:layout_height="fill_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-<HorizontalScrollView
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:fillViewport="true"
-    android:scrollbars="none"
-    android:id="@+id/hsv"
-   >
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:background="#ffffffff"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <HorizontalScrollView
+                android:id="@+id/hsv"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-               />
-</HorizontalScrollView>
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffffff"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="0dp"
@@ -42,4 +43,4 @@
                 android:layout_weight="1" />
         </LinearLayout>
     </TabHost>
-</LinearLayout><!-- From: file:/C:/Users/Khaled/Desktop/SW_Project/FCI-SocialNetwork-HHK/Source/Android/app/src/main/res/layout/activity_home.xml -->
+</LinearLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/activity_home.xml -->

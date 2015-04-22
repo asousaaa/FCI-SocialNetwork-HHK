@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="@android:color/background_light"
+    android:orientation="vertical"
+
+    android:weightSum="1">
+
+
+    <ImageButton
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="-15dp"
+        android:layout_marginTop="-10dp"
+        android:src="@drawable/ic_action_cancel" />
+
+    <ImageButton
+        android:id="@+id/opengroupchat"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:layout_weight="0.13"
+        android:src="@drawable/group_chat_img" />
+
+    <TextView
+        android:id="@+id/groupchatname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="Group name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <TextView
+        android:id="@+id/groupchatmembers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal"
+        android:minLines="3"
+        android:text="hosam hesham abdel fatha mohamed azzzam esraa ahmed hassan adel "
+        android:textColor="@android:color/tab_indicator_text">
+
+    </TextView>
+
+
+</LinearLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/group_chat.xml -->

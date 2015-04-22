@@ -34,9 +34,21 @@ public class UserController {
     static Intent homeIntent = new Intent(Application.getAppContext(),
             HomeActivity.class);
 
+
+    public static tab_group group_tab;
+    public static tab_home home_tab;
+    public static tab_request request_tab;
+    public static tab_search search_tab;
+    public static tab_timeline timeline_tab;
+    public static tab_page page_tab;
+
     public static UserController getInstance() {
         if (userController == null)
             userController = new UserController();
+
+        if (bundle == null)
+            bundle = new Bundle();
+
         return userController;
     }
 
@@ -62,6 +74,8 @@ public class UserController {
 
     public void login(String userName, String password) {
 
+
+
         new Connection().execute(
                 "http://fci-sn-hhk.appspot.com/rest/LoginService", userName,
                 password, "LoginService");
@@ -76,6 +90,12 @@ public class UserController {
 
     }
 
+    public void MsgChatGroup(String id,String sender,String content){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/MsgChatGroupService", id,
+                sender,content, "MsgChatGroupService");
+
+    }
     public void listfriend(String userid) {
 
         new Connection().execute(
@@ -83,6 +103,20 @@ public class UserController {
                 , "FriendList");
 
     }
+
+    public void viewchatgroup(String userid){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/ViewChatGroupService", userid
+                , "ViewChatGroupService");
+    }
+
+
+    public void viewmsgchatgroup(String groupid){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/ViewMsgChatGroupService", groupid
+                , "ViewMsgChatGroupService");
+    }
+
 
     public void CreateGroupChat(String groupname,String username,String names,String ides){
         new Connection().execute(
@@ -141,6 +175,39 @@ public class UserController {
     }
 
 
+
+
+    public void CreatePostService(String uname,String uid,String feel,String content,String type){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/CreatePostService", uname,
+                uid,feel,content,type, "CreatePostService");
+    }
+
+    public void ViewUserPostService(String userid){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/ViewUserPostService", userid,
+                "ViewUserPostService");
+
+    }
+
+    public void Createpage(String owner,String pagename,String pagecategory){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/CreatenewpageService", owner,
+                pagename,pagecategory,"CreatenewpageService");
+    }
+
+    public void SearchPageService(String name,String type){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/SearchPageService", name,
+                type,"SearchPageService");
+    }
+
+    public void ViewPageService(String name,String type){
+        new Connection().execute(
+                "http://fci-sn-hhk.appspot.com/rest/SearchPageService", name,
+                type,"ViewPageService");
+    }
+
     static private class Connection extends AsyncTask<String, String, String> {
 
         String serviceType;
@@ -172,6 +239,16 @@ public class UserController {
             }
             else if (serviceType.equals("FriendList")) {
                 urlParameters = "userid=" + params[1];
+            }
+            else if (serviceType.equals("MsgChatGroupService")) {
+                urlParameters = "gid=" + params[1]+"&sender="+params[2]
+                +"&msg="+params[3];
+            }
+            else if (serviceType.equals("ViewMsgChatGroupService")) {
+                urlParameters = "GroupId=" + params[1];
+            }
+            else if (serviceType.equals("ViewChatGroupService")) {
+                urlParameters = "user_id=" + params[1];
             }else if (serviceType.equals("SendMessageService")) {
                 urlParameters = "user_id=" + params[1]+"&friend_id="+params[2]+
                         "&user_name=" + params[3]+"&friend_name="+params[4]+"&content="+params[5];
@@ -180,6 +257,28 @@ public class UserController {
             }else if (serviceType.equals("CreateGroupChatService")) {
                 urlParameters = "gname=" + params[1]+"&owner="+params[2]+
                         "&names=" + params[3]+"&ides="+params[4];
+            }
+
+
+            else if (serviceType.equals("CreatePostService")) {
+                urlParameters = "user=" + params[1]+"&UID="+params[2]+
+                        "&feeling=" + params[3]+"&content="+params[4]+"&type="+params[5];
+            }
+            else if (serviceType.equals("ViewUserPostService")) {
+                System.out.println(params[1]);
+                urlParameters = "user_id=" + params[1];
+            }
+            else if (serviceType.equals("CreatenewpageService")) {
+                System.out.println(params[1]);
+                urlParameters = "owner=" + params[1]+"&name="+params[2]+"&cateagory="+params[3];
+            }
+            else if (serviceType.equals("SearchPageService")) {
+                System.out.println(params[1]);
+                urlParameters = "name=" + params[1]+"&type="+params[2];
+            }
+            else if (serviceType.equals("ViewPageService")) {
+                System.out.println(params[1]);
+                urlParameters = "name=" + params[1]+"&type="+params[2];
             }
 
 
@@ -242,25 +341,38 @@ public class UserController {
                     editor.putString("loginname",currentActiveUser.getName());
                     editor.putString("loginpass",currentActiveUser.getPass());
                     editor.commit();
-                    //	Intent homeIntent = new Intent(Application.getAppContext(),
-                    //			HomeActivity.class);
+                    	 homeIntent = new Intent(Application.getAppContext(),
+                    			HomeActivity.class);
                     System.out.println("--- " + serviceType + "IN LOGIN " + object.get("Status"));
 
+                    bundle.putString("search_service", "null");
+                    bundle.putString("Notification_service", "null");
+                    bundle.putString("FriendList_service", "null");
+                    bundle.putString("ViewChatGroupService_service", "null");
+                    bundle.putString("ViewMsgChatGroupService_service", "null");
+                    bundle.putString("viewrequest_service", "null");
+                    bundle.putString("sendrequest_service", "null");
+                    bundle.putString("acceptrequest_service", "null");
+                    bundle.putString("sendmsgrequest_service", "null");
+                    bundle.putString("CreateGroupChat_service", "null");
+                    bundle.putString("ViewUserPostService_service", "null");
+                    bundle.putString("SearchPageService_service", "null");
+                    bundle.putString("ViewPageService_service", "null");
+
+
+
+
+
                     homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    /* here you should initialize user entity */
+
                     homeIntent.putExtra("status", object.get("Status").toString());
                     homeIntent.putExtra("username", object.get("name").toString());
                     homeIntent.putExtra("userid", object.get("ID").toString());
                     homeIntent.putExtra("userpassword", object.get("password").toString());
                     homeIntent.putExtra("useremail", object.get("email").toString());
                     homeIntent.putExtra("service", "login");
-                    homeIntent.putExtra("search_service", "null");
-                    homeIntent.putExtra("Notification_service", "null");
                     homeIntent.putExtra("FriendList_service", "null");
-                    homeIntent.putExtra("viewrequest_service", "null");
-                    homeIntent.putExtra("sendrequest_service", "null");
-                    homeIntent.putExtra("acceptrequest_service", "null");
-                   userController.Notification(currentActiveUser.getID());
+                userController.Notification(currentActiveUser.getID());
                     Application.getAppContext().startActivity(homeIntent);
                 }
 
@@ -284,25 +396,6 @@ public class UserController {
                     Application.getAppContext().startActivity(homeIntent);
                 }
 
-                else if (serviceType.equals("SendMessage")) {
-
-                    JSONParser parser = new JSONParser();
-                    Object obj = parser.parse(result);
-                    JSONObject object = (JSONObject) obj;
-
-                    if (!object.containsKey("Status") || object.get("Status").equals("Failed")) {
-                        Toast.makeText(Application.getAppContext(), "Registration failed, Please try again.", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    Intent homeIntent = new Intent(Application.getAppContext(),
-                            MainActivity.class);
-
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "Registered successfully");
-                    homeIntent.putExtra("service", "signup");
-                    Toast.makeText(Application.getAppContext(), "Registered successfully, now you can login.", Toast.LENGTH_LONG).show();
-                    Application.getAppContext().startActivity(homeIntent);
-                }
 
                 else if (serviceType.equals("SearchService")) {
                     JSONParser parser = new JSONParser();
@@ -316,17 +409,17 @@ public class UserController {
                         return;
                     }
 
-                    //    Intent homeIntent = new Intent(Application.getAppContext(),
-                    //           HomeActivity.class);
 
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "lool you find");
-                    homeIntent.putExtra("search_service", "search");
-                    homeIntent.putExtra("search_arraysize", String.valueOf(object.size()));
-                    homeIntent.putExtra("search_array", result);
 
-                    Application.getAppContext().startActivity(homeIntent);
-                }
+                    bundle.putString("status", "ok");
+                    bundle.putString("search_service", "search");
+                    bundle.putString("search_arraysize",  String.valueOf(object.size()));
+                    bundle.putString("search_array",result );
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(search_tab)
+                            .attach(search_tab)
+                            .commit();
+                  }
 
 
                 else if (serviceType.equals("NotificationsService")) {
@@ -338,21 +431,20 @@ public class UserController {
                     if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
                         Toast.makeText(Application.getAppContext(), "no notification.", Toast.LENGTH_LONG).show();
                         homeIntent.putExtra("Notification_service", "null");
-                       // return;
+
                     }
 
-                    //    Intent homeIntent = new Intent(Application.getAppContext(),
-                    //           HomeActivity.class);
 
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "lool you find");
-                    homeIntent.putExtra("Notification_service", "Notification");
-                    homeIntent.putExtra("Notification_arraysize", String.valueOf(object.size()));
-                    System.out.println("size " + object.size());
-                    homeIntent.putExtra("Notification_array", result);
+                    bundle.putString("status", "ok");
+                    bundle.putString("Notification_service", "Notification");
+                    bundle.putString("Notification_arraysize",  String.valueOf(object.size()));
+                    bundle.putString("Notification_array",result );
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(home_tab)
+                            .attach(home_tab)
+                            .commit();
 
-                    Application.getAppContext().startActivity(homeIntent);
-                }
+              }
 
                 else if (serviceType.equals("FriendList")) {
                     JSONParser parser = new JSONParser();
@@ -363,28 +455,97 @@ public class UserController {
                     if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
                         Toast.makeText(Application.getAppContext(), "There are no Friends.", Toast.LENGTH_LONG).show();
                         homeIntent.putExtra("FriendList_service", "null");
-                         return;
+                        return;
+                    }
+
+
+                        bundle.putString("status", "ok");
+                        bundle.putString("FriendList_service", "FriendList");
+                        bundle.putString("FriendList_arraysize", String.valueOf(object.size()));
+                        bundle.putString("FriendList_array", result);
+                        ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                                .detach(search_tab)
+                                .attach(search_tab)
+                                .commit();
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                                .detach(group_tab)
+                                .attach(group_tab)
+                                .commit();
+
+                    }
+
+                else if (serviceType.equals("ViewMsgChatGroupService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONArray object = (JSONArray) obj;
+                    JSONObject ret = (JSONObject) object.get(0);
+
+                    if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "There are no massage .", Toast.LENGTH_LONG).show();
+                        bundle.putString("ViewMsgChatGroupService_service", "ViewMsgChatGroupService");
+                        bundle.putString("ViewMsgChatGroupService_arraysize", "-1");
+                        bundle.putString("ViewMsgChatGroupService_array", ret.get("chatid").toString());
+                        ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                                .detach(group_tab)
+                                .attach(group_tab)
+                                .commit();
+                    return;
+                    }
+
+
+
+                    bundle.putString("status", "ok");
+                    bundle.putString("ViewMsgChatGroupService_service", "ViewMsgChatGroupService");
+                    bundle.putString("ViewMsgChatGroupService_arraysize", String.valueOf(object.size()));
+                    bundle.putString("ViewMsgChatGroupService_array", result);
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(group_tab)
+                            .attach(group_tab)
+                            .commit();
+
+                      }
+
+                else if (serviceType.equals("ViewChatGroupService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONArray object = (JSONArray) obj;
+                    JSONObject ret = (JSONObject) object.get(0);
+
+                    if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "There are no Chat group.", Toast.LENGTH_LONG).show();
+                        homeIntent.putExtra("ViewChatGroup_service", "null");
+                        return;
                     }
 
                     //    Intent homeIntent = new Intent(Application.getAppContext(),
                     //           HomeActivity.class);
 
-                 //   homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //   homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    homeIntent.putExtras(bundle);
+                  //  homeIntent.putExtras(bundle);
+
+                    bundle.putString("status", "ok");
+                    bundle.putString("ViewChatGroupService_service", "ViewChatGroupService");
+                    bundle.putString("ViewChatGroupService_arraysize", String.valueOf(object.size()));
+                    bundle.putString("ViewChatGroupService_array", result);
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(group_tab)
+                            .attach(group_tab)
+                            .commit();
+
+/*
                     homeIntent.putExtra("status", "lool you find");
-                    homeIntent.putExtra("FriendList_service", "FriendList");
-                    homeIntent.putExtra("FriendList_arraysize", String.valueOf(object.size()));
+                    homeIntent.putExtra("ViewChatGroupService_service", "ViewChatGroupService");
+                    homeIntent.putExtra("ViewChatGroupService_arraysize", String.valueOf(object.size()));
                     System.out.println("size " + object.size());
-                    homeIntent.putExtra("FriendList_array", result);
+                    homeIntent.putExtra("ViewChatGroupService_array", result);
 
                     Application.getAppContext().startActivity(homeIntent);
-                }
+  */              }
 
 
                 else if (serviceType.equals("viewrequestService")) {
-                    //  Intent homeIntent = new Intent(Application.getAppContext(),
-                    //           HomeActivity.class);
+
                     JSONParser parser = new JSONParser();
                     Object obj = parser.parse(result);
                     JSONArray object = (JSONArray) obj;
@@ -397,36 +558,44 @@ public class UserController {
                         return;
                     }
 
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "ok");
-                    homeIntent.putExtra("viewrequest_service", "viewrequest");
-                    homeIntent.putExtra("viewrequest_arraysize", String.valueOf(object.size()));
-                    System.out.println("size " + object.size());
-                    homeIntent.putExtra("viewrequest_array", result);
+
+                    bundle.putString("update","called");
+                    bundle.putString("status", "ok");
+                    bundle.putString("viewrequest_service", "viewrequest");
+                    bundle.putString("viewrequest_arraysize", String.valueOf(object.size()));
+                    bundle.putString("viewrequest_array", result);
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(request_tab)
+                            .attach(request_tab)
+                            .commit();
 
 
-                    Application.getAppContext().startActivity(homeIntent);
                 }
 
                 else if (serviceType.equals("RequestService")) {
-                    //   Intent homeIntent = new Intent(Application.getAppContext(),
-                    //           HomeActivity.class);
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "sending");
-                    homeIntent.putExtra("sendrequest_service", "sendrequest");
-                 //   Application.getAppContext().startActivity(homeIntent);
-                }
+
+                    bundle.putString("status", "sending");
+                    bundle.putString("sendrequest_service", "sendrequest");
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(request_tab)
+                            .attach(request_tab)
+                            .commit();
+             }
 
                 else if (serviceType.equals("acceptrequestService")) {
                     JSONParser parser = new JSONParser();
                     Object obj = parser.parse(result);
                     JSONObject ret = (JSONObject) obj;
 
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "ok");
-                    homeIntent.putExtra("viewrequest_service", "null");
-                    homeIntent.putExtra("acceptrequest_service", "acceptrequest");
-                   // Application.getAppContext().startActivity(homeIntent);
+
+                    bundle.putString("status", "ok");
+                    bundle.putString("acceptrequest_service", "acceptrequest");
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(request_tab)
+                            .attach(request_tab)
+                            .commit();
+
+
                 }
                 else if (serviceType.equals("SendMessageService")) {
                     JSONParser parser = new JSONParser();
@@ -438,12 +607,32 @@ public class UserController {
                         return;
                     }
 
+
+                    bundle.putString("status", "ok");
+                    bundle.putString("sendmsgrequest_service", "SendMessage");
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(search_tab)
+                            .attach(search_tab)
+                            .commit();
+
                         Toast.makeText(Application.getAppContext(), "Message sent.", Toast.LENGTH_LONG).show();
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "ok");
-                    homeIntent.putExtra("sendmsgrequest_service", "SendMessage");
-                    // Application.getAppContext().startActivity(homeIntent);
+
                 }
+
+                else if (serviceType.equals("MsgChatGroupService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONObject object = (JSONObject) obj;
+
+                    if (!object.containsKey("Status") || object.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "send message failed, Please try again.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    Toast.makeText(Application.getAppContext(), "Message sent.", Toast.LENGTH_LONG).show();
+
+                }
+
                 else if (serviceType.equals("CreateGroupChatService")) {
                     JSONParser parser = new JSONParser();
                     Object obj = parser.parse(result);
@@ -454,15 +643,128 @@ public class UserController {
                         return;
                     }
 
+
+                    bundle.putString("status", "ok");
+                    bundle.putString("CreateGroupChat_service", "CreateGroupChat");
+                    ((HomeActivity) Application.Homecontext).getSupportFragmentManager().beginTransaction()
+                            .detach(group_tab)
+                            .attach(group_tab)
+                            .commit();
+
                     Toast.makeText(Application.getAppContext(), "Group created successfully.", Toast.LENGTH_LONG).show();
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    homeIntent.putExtra("status", "ok");
-                    homeIntent.putExtra("CreateGroupChat_service", "CreateGroupChat");
-                    // Application.getAppContext().startActivity(homeIntent);
+                }
+
+                else if (serviceType.equals("CreatePostService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONObject object = (JSONObject) obj;
+
+                    if (!object.containsKey("Status") || object.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "Please try again.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+
+                    Toast.makeText(Application.getAppContext(), "post created successfully.", Toast.LENGTH_LONG).show();
+                }
+
+                else if (serviceType.equals("ViewUserPostService")) {
+
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONArray object = (JSONArray) obj;
+                    JSONObject ret = (JSONObject) object.get(0);
+
+
+                    if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
+                       Toast.makeText(Application.getAppContext(), "No request found.", Toast.LENGTH_LONG).show();
+                     //   homeIntent.putExtra("viewrequest_service", "null");
+                        return;
+                    }
+
+
+                    bundle.putString("update","called");
+                    bundle.putString("status", "ok");
+                    bundle.putString("ViewUserPostService_service", "ViewUserPostService");
+                    bundle.putString("ViewUserPostService_arraysize", String.valueOf(object.size()));
+                    bundle.putString("ViewUserPostService_array", result);
+                    ((NewsFeedActivity) Application.NewsFeedActivity).getSupportFragmentManager().beginTransaction()
+                            .detach(timeline_tab)
+                            .attach(timeline_tab)
+                            .commit();
+
+
+                }
+
+                else if (serviceType.equals("CreatenewpageService")) {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONObject object = (JSONObject) obj;
+
+                    if (!object.containsKey("Status") || object.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "Create Page failed, Please try again.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    Toast.makeText(Application.getAppContext(), "Page created successfully.", Toast.LENGTH_LONG).show();
+                }
+
+                else if (serviceType.equals("SearchPageService")) {
+
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONArray object = (JSONArray) obj;
+                    JSONObject ret = (JSONObject) object.get(0);
+
+
+                    if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "No request found.", Toast.LENGTH_LONG).show();
+                        //   homeIntent.putExtra("viewrequest_service", "null");
+                        return;
+                    }
+
+
+                    bundle.putString("update","called");
+                    bundle.putString("status", "ok");
+                    bundle.putString("SearchPageService_service", "SearchPageService");
+                    bundle.putString("SearchPageService_arraysize", String.valueOf(object.size()));
+                    bundle.putString("SearchPageService_array", result);
+                    ((NewsFeedActivity) Application.NewsFeedActivity).getSupportFragmentManager().beginTransaction()
+                            .detach(page_tab)
+                            .attach(page_tab)
+                            .commit();
+
+
                 }
 
 
+                else if (serviceType.equals("ViewPageService")) {
 
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(result);
+                    JSONArray object = (JSONArray) obj;
+                    JSONObject ret = (JSONObject) object.get(0);
+
+
+                    if (!ret.containsKey("Status") || ret.get("Status").equals("Failed")) {
+                        Toast.makeText(Application.getAppContext(), "No request found.", Toast.LENGTH_LONG).show();
+                        //   homeIntent.putExtra("viewrequest_service", "null");
+                        return;
+                    }
+
+
+                    bundle.putString("update","called");
+                    bundle.putString("status", "ok");
+                    bundle.putString("ViewPageService_service", "ViewPageService");
+                    bundle.putString("ViewPageService_arraysize", String.valueOf(object.size()));
+                    bundle.putString("ViewPageService_array", result);
+                    ((NewsFeedActivity) Application.NewsFeedActivity).getSupportFragmentManager().beginTransaction()
+                            .detach(page_tab)
+                            .attach(page_tab)
+                            .commit();
+
+
+                }
 
 
             } catch (Exception e) {
@@ -475,3 +777,12 @@ public class UserController {
     }
 
 }
+/*
+
+@Override
+public void onBackPressed() {
+    // your code.
+}
+
+
+ */

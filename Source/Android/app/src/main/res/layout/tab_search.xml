@@ -36,7 +36,7 @@
                 android:layout_toStartOf="@+id/searchbutton"
                 android:hint="User Name"
                 android:inputType="text"
-                android:text="ahmed" />
+                />
 
             <ImageButton
                 android:id="@+id/searchbutton"

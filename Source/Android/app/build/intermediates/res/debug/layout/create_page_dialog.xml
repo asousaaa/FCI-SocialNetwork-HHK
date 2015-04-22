@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/groupchatlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <requestFocus />
+
+    <TextView
+        android:id="@+id/titel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="New Page"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <EditText
+        android:id="@+id/pagename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="page name"
+        android:maxLines="3"
+        android:minLines="1"/>
+    <EditText
+        android:id="@+id/pagecateagory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="page cateagory"
+        android:maxLines="3"
+        android:minLines="1"/>
+
+    <requestFocus />
+</LinearLayout><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/create_page_dialog.xml -->

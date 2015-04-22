@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
 
+        android:id="@+id/tab_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#65ffffff"
         android:orientation="vertical">
-
 
         <RelativeLayout
             android:id="@+id/Group_header"
@@ -32,6 +33,18 @@
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
+            <ImageButton
+                android:id="@+id/refresh_group"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+
+
+                android:layout_toLeftOf="@+id/create_group"
+                android:layout_toStartOf="@+id/create_group"
+                android:src="@drawable/ic_action_refresh" />
+
             <Button
                 android:id="@+id/create_group"
                 style="?android:attr/borderlessButtonStyle"
@@ -39,32 +52,40 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/grouptext"
                 android:layout_alignParentEnd="true"
-                android:text="Create"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/grouptext"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/ic_action_expand" />
+                android:src="@drawable/ic_action_expand"
+                android:text="Create" />
         </RelativeLayout>
 
-        <ScrollView
-            android:id="@+id/Group_View"
+        <RelativeLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/Group_header">
 
-            android:layout_below="@+id/friend_header"
-            android:background="#bcffffff">
-
-
-            <TableLayout
-                android:id="@+id/grouptable"
+            <ScrollView
+                android:id="@+id/Group_View"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:shrinkColumns="*"
-                android:stretchColumns="*">
 
-            </TableLayout>
-        </ScrollView>
+
+                android:background="@android:color/transparent">
+
+
+                <LinearLayout
+
+                    android:id="@+id/grouptable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+
+                    ></LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
 
 
     </RelativeLayout>
-</ScrollView><!-- From: file:/C:/Users/Khaled/Desktop/SW_Project/FCI-SocialNetwork-HHK/Source/Android/app/src/main/res/layout/tab_group.xml -->
+</ScrollView><!-- From: file:/C:/Users/hosam%20azzam/AndroidStudioProjects/FCI-SocialNetwork-HHK-android/app/src/main/res/layout/tab_group.xml -->

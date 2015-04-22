@@ -36,19 +36,19 @@ public class HomeActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        bundle =getIntent().getExtras();
+        bundle = getIntent().getExtras();
+        com.FCI.HHK.Controllers.Application.Homecontext = this;
 
-
-        ActionBar ab= getActionBar();
+        ActionBar ab = getActionBar();
         ab.hide();
         List<Fragment> fragments = new Vector<Fragment>();
-       // fragments.add(Fragment.instantiate(this, tab_home.class.getName()));
+        // fragments.add(Fragment.instantiate(this, tab_home.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_home.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_search.class.getName()));
-    //    fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
+        //    fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_group.class.getName()));
         fragments.add(Fragment.instantiate(this, tab_request.class.getName()));
-        fragments.add(Fragment.instantiate(this, tab_setting.class.getName()));
+        fragments.add(Fragment.instantiate(this, tab_timeline.class.getName()));
 
         this.mPagerAdapter = new PagerAdapter(
                 super.getSupportFragmentManager(), fragments);
@@ -75,11 +75,6 @@ public class HomeActivity extends FragmentActivity implements
                                 "",
                                 getResources().getDrawable(
                                         R.drawable.ic_action_web_site)));
-
-
-
-
-
 
 
         AddTab(this.mTabHost,
@@ -116,21 +111,22 @@ public class HomeActivity extends FragmentActivity implements
         mTabHost.setOnTabChangedListener(this);
 
         extras = getIntent().getExtras();
-
+/*
         shared = getSharedPreferences("social", MODE_PRIVATE);
         position = shared.getInt("pos", 0);
+*/
 
-
-        mTabHost.setCurrentTab(position);
-        mViewPager.setCurrentItem(position);
-        if(position>=4) {
+        mTabHost.setCurrentTab(0);
+        mViewPager.setCurrentItem(0);
+    /*    if (position >= 4) {
 //            Toast.makeText(getApplication(), "postion "+position, Toast.LENGTH_LONG).show();
             HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
             hsv.smoothScrollBy(200, 0);
-        }else{
+        } else {
             HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
             hsv.smoothScrollBy(-200, 0);
         }
+  */
         if (extras.getString("service").equals("sendrequest")) {
             Toast.makeText(getApplication(), "Request send Successfully", Toast.LENGTH_LONG).show();
         }
@@ -148,18 +144,18 @@ public class HomeActivity extends FragmentActivity implements
 
     public void onTabChanged(String tag) {
         // TabInfo newTab = this.mapTabInfo.get(tag);
-        SharedPreferences.Editor editor = getSharedPreferences("social",
-                MODE_PRIVATE).edit();
+        //      SharedPreferences.Editor editor = getSharedPreferences("social",
+        //              MODE_PRIVATE).edit();
 
         int pos = this.mTabHost.getCurrentTab();
-
+/*
         editor.putInt("pos", pos);
         editor.commit();
-
-        if(pos>=4) {
+*/
+        if (pos >= 4) {
             HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
             hsv.smoothScrollBy(200, 0);
-        }else{
+        } else {
             HorizontalScrollView hsv = (HorizontalScrollView) findViewById(R.id.hsv);
             hsv.smoothScrollBy(-200, 0);
         }

@@ -35,6 +35,8 @@ public class tab_search extends Fragment implements View.OnClickListener {
     Button B[] = new Button[100];
 
     public void onCreate(Bundle savedInstanceState) {
+        UserController controller = Application.getUserController();
+        controller.search_tab = tab_search.this;
 
         super.onCreate(savedInstanceState);
 
@@ -42,7 +44,9 @@ public class tab_search extends Fragment implements View.OnClickListener {
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        UserController controller = Application.getUserController();
+
         View V = inflater.inflate(R.layout.tab_search, container, false);
         searchname = (EditText) V.findViewById(R.id.searchtext);
         searchbutton = (ImageButton) V.findViewById(R.id.searchbutton);
@@ -51,163 +55,161 @@ public class tab_search extends Fragment implements View.OnClickListener {
         searchtable = (TableLayout) V.findViewById(R.id.searchtable);
 
         friend = (ImageButton) V.findViewById(R.id.show_friend);
-       friend_table = (TableLayout) V.findViewById(R.id.friendtable);
+        friend_table = (TableLayout) V.findViewById(R.id.friendtable);
 
         friend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 UserController controller = Application.getUserController();
 
-                controller.bundle = HomeActivity.bundle;
+
                 System.out.println(HomeActivity.bundle);
                 controller.listfriend(controller.GetActiveUserId());
             }
         });
 
-
-        if (HomeActivity.extras.getString("search_service").equals("search")) {
-            int size = Integer.valueOf(HomeActivity.extras.getString("search_arraysize"));
-            //    String name = HomeActivity.extras.getString("friendname");
-            //    String welcome = HomeActivity.extras.getString("status");
-            //    System.out.println(welcome + " " + name);
-            try {
-                JSONParser parser = new JSONParser();
-                Object obj = parser.parse(HomeActivity.extras.getString("search_array"));
-                JSONArray object = (JSONArray) obj;
-
-
-                for (int i = 1; i <= size; i++) {
-                    JSONObject ret = (JSONObject) object.get(i - 1);
-                    TableRow row = new TableRow(getActivity());
-                    row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
-
-                    // inner for loop
+        if (controller.bundle != null)
+            if (controller.bundle.get("search_service").equals("search")) {
+                int size = Integer.valueOf((String) controller.bundle.get("search_arraysize"));
+                //    String name = HomeActivity.extras.getString("friendname");
+                //    String welcome = HomeActivity.extras.getString("status");
+                //    System.out.println(welcome + " " + name);
+                try {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse((String) controller.bundle.get("search_array"));
+                    JSONArray object = (JSONArray) obj;
 
 
-                    tv[i] = new TextView(getActivity());
-                    tv[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
+                    for (int i = 1; i <= size; i++) {
+                        JSONObject ret = (JSONObject) object.get(i - 1);
+                        TableRow row = new TableRow(getActivity());
+                        row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
 
-                    tv[i].setPadding(15, 15, 0, 0);
-                    tv[i].setTextSize(25);
-                    tv[i].setText(ret.get("name").toString());
-                    tv[i].setId(Integer.valueOf(ret.get("ID").toString()));
-                    row.addView(tv[i]);
+                        // inner for loop
 
 
-                    B[i] = new Button(getActivity());
-                    B[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
-                    B[i].setPadding(5, 5, 5, 5);
-                    B[i].setText("Add");
-                    B[i].setWidth(20);
-                    B[i].setId(Integer.valueOf(String.valueOf(i)));
-                    row.addView(B[i]);
-                    searchtable.addView(row);
-                    TextView TV = new TextView(getActivity());
-                    TV.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
-                    TV.setText("Email :" + ret.get("email").toString());
-                    searchtable.addView(TV);
+                        tv[i] = new TextView(getActivity());
+                        tv[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
 
-                    B[i].setOnClickListener(this);
+                        tv[i].setPadding(15, 15, 0, 0);
+                        tv[i].setTextSize(25);
+                        tv[i].setText(ret.get("name").toString());
+                        tv[i].setId(Integer.valueOf(ret.get("ID").toString()));
+                        row.addView(tv[i]);
 
 
+                        B[i] = new Button(getActivity());
+                        B[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
+                        B[i].setPadding(5, 5, 5, 5);
+                        B[i].setText("Add");
+                        B[i].setWidth(20);
+                        B[i].setId(Integer.valueOf(String.valueOf(i)));
+                        row.addView(B[i]);
+                        searchtable.addView(row);
+                        TextView TV = new TextView(getActivity());
+                        TV.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
+                        TV.setText("Email :" + ret.get("email").toString());
+                        searchtable.addView(TV);
+
+                        B[i].setOnClickListener(this);
+
+
+                    }
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
-        }
+
+        if (controller.bundle != null)
+            if (controller.bundle.get("FriendList_service").equals("FriendList")) {
+                int size = Integer.valueOf((String) controller.bundle.get("FriendList_arraysize"));
+
+                try {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse((String) controller.bundle.get("FriendList_array"));
+                    JSONArray object = (JSONArray) obj;
 
 
-        if (HomeActivity.extras.getString("FriendList_service").equals("FriendList")) {
-            int size = Integer.valueOf(HomeActivity.extras.getString("FriendList_arraysize"));
+                    for (int i = 1; i <= size; i++) {
+                        JSONObject ret = (JSONObject) object.get(i - 1);
+                        TableRow row = new TableRow(getActivity());
+                        row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
 
-            try {
-                JSONParser parser = new JSONParser();
-                Object obj = parser.parse(HomeActivity.extras.getString("FriendList_array"));
-                JSONArray object = (JSONArray) obj;
-
-
-                for (int i = 1; i <= size; i++) {
-                    JSONObject ret = (JSONObject) object.get(i - 1);
-                    TableRow row = new TableRow(getActivity());
-                    row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
-
-                    // inner for loop
+                        // inner for loop
 
 
-                    tv[i] = new TextView(getActivity());
-                    tv[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
+                        tv[i] = new TextView(getActivity());
+                        tv[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
 
-                    tv[i].setPadding(15, 15, 0, 0);
-                    tv[i].setTextSize(25);
-                    tv[i].setText(ret.get("friend_name").toString());
-                    tv[i].setId(Integer.valueOf(ret.get("friend_id").toString()));
-                    row.addView(tv[i]);
-
-
-                    B[i] = new Button(getActivity());
-                    B[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
-                    B[i].setPadding(5, 5, 5, 5);
-                    B[i].setText("msg");
-                    B[i].setWidth(20);
-                    B[i].setId(Integer.valueOf(String.valueOf(i)));
-                    row.addView(B[i]);
-                    friend_table.addView(row);
-                    B[i].setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            final View V= v;
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            LayoutInflater li = LayoutInflater.from(getActivity());
-                            final View promptsView = li.inflate(R.layout.message_dialog, null);
-
-                            builder.setView(promptsView);
+                        tv[i].setPadding(15, 15, 0, 0);
+                        tv[i].setTextSize(25);
+                        tv[i].setText(ret.get("friend_name").toString());
+                        tv[i].setId(Integer.valueOf(ret.get("friend_id").toString()));
+                        row.addView(tv[i]);
 
 
-                            builder.setPositiveButton("send", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                           final EditText msg = (EditText) promptsView
-                                                    .findViewById(R.id.messagecontent);
-                                            UserController controller = Application.getUserController();
-                                            System.out.println(tv[V.getId()].getId());
-                                            System.out.println(tv[V.getId()].getText());
-                                            controller.sendmessage(controller.GetActiveUserId(),String.valueOf(tv[V.getId()].getId()),
-                                                    controller.GetActiveUserName(),String.valueOf(tv[V.getId()].getText()),msg.getText().toString());
-                                            System.out.println("no thing yet :P");
+                        B[i] = new Button(getActivity());
+                        B[i].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
+                        B[i].setPadding(5, 5, 5, 5);
+                        B[i].setText("msg");
+                        B[i].setWidth(20);
+                        B[i].setId(Integer.valueOf(String.valueOf(i)));
+                        row.addView(B[i]);
+                        friend_table.addView(row);
+                        B[i].setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                final View V = v;
 
-                                        }
-                                    })
-                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.dismiss();
-                                        }
-                                    });
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                LayoutInflater li = LayoutInflater.from(getActivity());
+                                final View promptsView = li.inflate(R.layout.message_dialog, null);
 
+                                builder.setView(promptsView);
+
+
+                                builder.setPositiveButton("send", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        final EditText msg = (EditText) promptsView
+                                                .findViewById(R.id.messagecontent);
+                                        UserController controller = Application.getUserController();
+                                        System.out.println(tv[V.getId()].getId());
+                                        System.out.println(tv[V.getId()].getText());
+                                        controller.sendmessage(controller.GetActiveUserId(), String.valueOf(tv[V.getId()].getId()),
+                                                controller.GetActiveUserName(), String.valueOf(tv[V.getId()].getText()), msg.getText().toString());
+                                        System.out.println("no thing yet :P");
+
+                                    }
+                                })
+                                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.dismiss();
+                                            }
+                                        });
 
 
 // 3. Get the AlertDialog from create()
-                            AlertDialog dialog = builder.create();
+                                AlertDialog dialog = builder.create();
 
-                        dialog.show();
-                        }
-                    });
+                                dialog.show();
+                            }
+                        });
 
 
+                    }
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
-        }
-
 
 
         return V;
@@ -228,7 +230,7 @@ public class tab_search extends Fragment implements View.OnClickListener {
             System.out.println(controller.GetActiveUserName());
             System.out.println(controller.GetActiveUserId());
             controller.sendRequest(tv[v.getId()].getText().toString(), String.valueOf((tv[v.getId()].getId())), controller.GetActiveUserName(), controller.GetActiveUserId());
-            controller.search(searchname.getText().toString(), controller.GetActiveUserName(), controller.GetActiveUserId());
+            //     controller.search(searchname.getText().toString(), controller.GetActiveUserName(), controller.GetActiveUserId());
 
         }
     }

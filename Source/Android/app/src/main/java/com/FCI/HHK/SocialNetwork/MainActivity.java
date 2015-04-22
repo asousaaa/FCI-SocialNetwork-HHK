@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
                 if (flage == false) {
                     Toast.makeText(getApplication(), "No network connection", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent registerationIntent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                    Intent registerationIntent = new Intent(getApplicationContext(), activity_timeline.class);
                     startActivity(registerationIntent);
                 }
             }

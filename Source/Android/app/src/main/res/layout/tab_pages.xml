@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/pagesearch_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/holo_blue_dark"
+            android:paddingBottom="10dp">
+
+            <EditText
+                android:id="@+id/pagesearchtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_toLeftOf="@+id/pagesearchbutton"
+                android:layout_toStartOf="@+id/pagesearchbutton"
+                android:hint="Page Name"
+                android:inputType="text"
+              />
+
+            <ImageButton
+                android:id="@+id/pagesearchbutton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pagesearchtext"
+                android:layout_alignParentEnd="true"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/pagesearchtext"
+                android:src="@drawable/ic_action_search" />
+        </RelativeLayout>
+
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pagesearch_header"
+            android:background="@android:color/transparent">
+
+            <LinearLayout
+                android:id="@+id/page_search_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical" />
+        </ScrollView>
+
+
+        <RelativeLayout
+            android:id="@+id/userpage_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scrollView"
+            android:background="@android:color/holo_blue_dark"
+
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/pagetext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Your pages"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create"
+                android:background="@android:color/transparent"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:paddingTop="7dp"
+                android:id="@+id/createpage"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+            <ImageButton
+                android:id="@+id/pagerereshbutton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_action_refresh"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/createpage"
+                android:layout_toStartOf="@+id/createpage" />
+
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/friend_View"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/userpage_header"
+            android:background="@android:color/transparent" >
+
+
+            <LinearLayout
+                android:id="@+id/page_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical" />
+        </ScrollView>
+
+
+    </RelativeLayout>
+</ScrollView>

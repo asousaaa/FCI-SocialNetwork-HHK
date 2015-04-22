@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff0edec"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <Button
+        android:id="@+id/post_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="user name"
+        android:textStyle="bold"
+        android:textColor="#ff2981b4"
+        android:drawableLeft="@drawable/ic_action_person"
+        android:background="@android:color/transparent"
+
+        />
+
+    <TextView
+        android:id="@+id/post_contentt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/relativeLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/relativeLayout2"
+        android:layout_below="@+id/post_owner"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:text="  post content"
+        android:background="#fff7f4f3"
+        android:textColor="#000000"
+        android:textSize="23sp" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/post_contentt"
+        android:layout_margin="5dp"
+        android:gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:padding="5dp">
+
+        <Button
+            android:id="@+id/post_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/post_share"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/ic_action_good"
+            android:text="Like"
+            android:layout_alignBottom="@+id/post_share" />
+
+        <Button
+            android:id="@+id/post_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+
+
+            android:layout_alignParentTop="true"
+            android:text="Share"
+            android:background="@android:color/transparent"
+           android:drawableLeft="@drawable/ic_action_share"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>
