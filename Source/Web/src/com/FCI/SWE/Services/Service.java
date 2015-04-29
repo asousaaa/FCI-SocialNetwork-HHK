@@ -37,6 +37,7 @@ import com.FCI.SWE.Models.*;
  * @since 2014-02-12
  *
  */
+
 @Path("/")
 @Produces("text/html")
 public class Service {
@@ -70,7 +71,21 @@ public class Service {
 		object.put("Status", "OK");
 		return object.toString();
 	}
-
+   
+	/**
+	 * Request Rest service, this service will be called to make
+	 * friend request. This function will store request in data store
+	 * 
+	 * @param username
+	 *            provided user name
+	 * @param friendid
+	 *            provided friend id
+	 * @param userid
+	 *            provided userid
+	 * @param status
+	 *            provided status
+	 * @return Status json
+	 */
 	@POST
 	@Path("/RequestService")
 	public String requestService(@FormParam("friend_name") String friendname,
@@ -85,6 +100,14 @@ public class Service {
 		return object.toString();
 	}
 
+	/**
+	 * View Request Rest service, this service will be called to view
+	 * friend request. This function will view request from data store
+	 * 
+	 * @param userid
+	 *            provided userid
+	 * @return Status json
+	 */
 	@POST
 	@Path("/viewrequestService")
 	public String viewrequestService(@FormParam("user_id") String user_id) {
@@ -110,6 +133,17 @@ public class Service {
 		return array.toString();
 	}
 
+	/**
+	 * Accept Request Rest service, this service will be called to accept
+	 * friend request
+	 * 
+	 * @param friendid
+	 *            provided friend id
+	 * @param userid
+	 *            provided userid
+	 *            
+	 * @return Status json
+	 */
 	@POST
 	@Path("/acceptrequestService")
 	public String acceptrequestService(@FormParam("user_id") String user_id,
@@ -127,6 +161,20 @@ public class Service {
 		return object.toString();
 	}
 
+	/**
+	 * Send Massage Rest service, this service will be called to send
+	 * massage. This function will store request in data store
+	 * 
+	 * @param username
+	 *            provided user name
+	 * @param friendid
+	 *            provided friend id
+	 * @param userid
+	 *            provided userid
+	 * @param status
+	 *            provided status
+	 * @return Status json
+	 */
 	@POST
 	@Path("/SendMessageService")
 	public String SendMessageService(@FormParam("user_id") String user_id,
@@ -148,13 +196,11 @@ public class Service {
 	}
 
 	/**
-	 * Login Rest Service, this service will be called to make login process
+	 * Search Rest Service, this service will be called to search for a name
 	 * also will check user data and returns new user from datastore
 	 * 
 	 * @param uname
-	 *            provided user name
-	 * @param pass
-	 *            provided user password
+	 *            provided search name
 	 * @return user in json format
 	 */
 	@POST
@@ -165,7 +211,7 @@ public class Service {
 		ArrayList<UserEntity> user = UserEntity.searchforuser(sname);
 
 		if (user.size() == 0) {
-			System.out.println("null");
+			//System.out.println("null");
 			object.put("Status", "Failed");
 			array.add(object);
 		} else {
@@ -179,15 +225,29 @@ public class Service {
 				user1.put("password", user.get(i).getPass());
 				user1.put("ID", user.get(i).getId());
 				array.add(user1);
-				System.out.println("ser " + user.get(i).getName());
+				//System.out.println("ser " + user.get(i).getName());
 			}
 
 		}
-		System.out.println("size " + array.size());
+	//	System.out.println("size " + array.size());
 		return array.toJSONString();
 
 	}
 
+	/**
+	 * Create Group chat Rest service, this service will be called to create
+	 * group. This function will store group in data store
+	 * 
+	 * @param gname
+	 *            provided group chat name
+	 * @param owner
+	 *            provided group chat owner
+	 * @param names
+	 *            provided names of group members
+	 * @param ides
+	 *            provided ides of group members
+	 * @return Status json
+	 */
 	@POST
 	@Path("/CreateGroupChatService")
 	public String CreateGroupChatService(@FormParam("gname") String Gname,
@@ -205,7 +265,20 @@ public class Service {
 		return object.toString();
 
 	}
-
+    
+	/**
+	 * Msg Chat Group  Rest service, this service will be called to
+	 * send massage in group service
+	 * This function will store group in data store
+	 * 
+	 * @param gid
+	 *            provided group chat id
+	 * @param sender
+	 *            provided sender of the massage
+	 * @param msg
+	 *            provided content of massage
+	 * @return Status json
+	 */
 	@POST
 	@Path("/MsgChatGroupService")
 	public String MsgChatGroup(@FormParam("gid") String Gid,
@@ -222,6 +295,14 @@ public class Service {
 
 	}
 
+	/**
+	 * View Chat Group Rest service, this service will be view group chat
+	 * This function will view group from data store
+	 * 
+	 * @param gid
+	 *            provided group chat id
+	 * @return Status json
+	 */
 	@POST
 	@Path("/ViewChatGroupService")
 	public String viewChatGroup(@FormParam("user_id") String userid)
@@ -249,6 +330,15 @@ public class Service {
 		return array.toJSONString();
 	}
 
+	/**
+	 * view Msg Chat Group Rest service, this service will be called to
+	 * view massage in chat group service
+	 * This function will store group in data store
+	 * 
+	 * @param groupid
+	 *            provided group chat id
+	 * @return Status json
+	 */
 	@POST
 	@Path("/ViewMsgChatGroupService")
 	public String viewMsgChatGroup(@FormParam("GroupId") String id)
@@ -281,6 +371,15 @@ public class Service {
 		return array.toJSONString();
 	}
 
+	/**
+	 * Notification Rest service, this service will be called to
+	 * view Notification
+	 * This function will view notification from data store
+	 * 
+	 * @param userid
+	 *            provided user id
+	 * @return Status json
+	 */
 	@POST
 	@Path("/NotificationsService")
 	public String NotificationsService(@FormParam("userid") String user_id)
@@ -291,7 +390,7 @@ public class Service {
 		ArrayList<Notifications> not = Notifications.Notifiy(user_id);
 
 		if (not.size() == 0) {
-			System.out.println("null");
+			//System.out.println("null");
 			object.put("Status", "Failed");
 			array.add(object);
 		} else {
@@ -311,11 +410,19 @@ public class Service {
 			}
 
 		}
-		System.out.println("size " + array.size());
+	//	System.out.println("size " + array.size());
 		return array.toJSONString();
 
 	}
-
+	/**
+	 * Friend List Rest service, this service will be called to
+	 * list friends 
+	 * This function will view friends from data store
+	 * 
+	 * @param userid
+	 *            provided user id
+	 * @return Status json
+	 */
 	@POST
 	@Path("/FriendList")
 	public String FriendList(@FormParam("userid") String user_id) {
@@ -324,7 +431,7 @@ public class Service {
 		ArrayList<Friends> fri = Friends.Friendlist(user_id);
 
 		if (fri.size() == 0) {
-			System.out.println("null");
+			//System.out.println("null");
 			object.put("Status", "Failed");
 			array.add(object);
 		} else {
@@ -341,11 +448,21 @@ public class Service {
 			}
 
 		}
-		System.out.println("size " + array.size());
+		//System.out.println("size " + array.size());
 		return array.toJSONString();
 
 	}
-
+  
+	/**
+	 * Login Rest service, this service will be called to
+	 * Login into app
+	 * 
+	 * @param uname
+	 *            provided user name
+	 * @param password
+	 *            provided password
+	 * @return Status json
+	 */
 	@POST
 	@Path("/LoginService")
 	public String loginService(@FormParam("uname") String uname,
@@ -366,7 +483,20 @@ public class Service {
 		return object.toString();
 
 	}
-
+	
+	/**
+	 * Create New page Rest service, this service will be called to
+	 * create new page
+	 * This function will store page in data store
+	 * 
+	 * @param owner
+	 *            provided page admin
+	 * @param name
+	 *            provided name
+	 * @param category
+	 *            provided page category
+	 * @return Status json
+	 */
 	@POST
 	@Path("/CreatenewpageService")
 	public String CreatenewPageService(@FormParam("owner") String owner,
@@ -385,7 +515,21 @@ public class Service {
 
 	}
 
-	
+	/**
+	 * Create Post Rest service, this service will be called to
+	 * create new post
+	 * This function will store page in data store
+	 * 
+	 * @param UID
+	 *            provided user id
+	 * @param user_name
+	 *            provided username
+	 * @param feeling
+	 *            provided user feeling
+	 * @param type
+	 *            provided type
+	 * @return Status json
+	 */
 	@POST
 	@Path("/CreatePostService")
 	public String CreatePostService(@FormParam("user") String user_name,
@@ -393,19 +537,34 @@ public class Service {
 			@FormParam("feeling") String feeling,
 			@FormParam("content") String content, @FormParam("type") String type) {
 
-		System.out.print(user_name);
+	//	System.out.print(user_name);
 		JSONObject object = new JSONObject();
 
 		Post P = new Post();
 		if (P.newpost(user_ID, user_name, feeling, content, type) != "post") {
 			object.put("Status", "Failed");
 		} else {
-			object.put("Status", "OKjjjjjj");
+			object.put("Status", "OK");
 		}
 		return object.toString();
 
 	}
-
+    
+	/**
+	 * Create PostPage Rest service, this service will be called to
+	 * create new post in a page
+	 * This function will store post in data store
+	 * 
+	 * @param PID
+	 *            provided post id
+	 * @param UID
+	 *            provided user id
+	 * @param feeling
+	 *            provided user feeling
+	 * @param content
+	 *            provided post content
+	 * @return Status json
+	 */
 	@POST
 	@Path("/CreatePostPageService")
 	public String CreatePostPageService(@FormParam("PID") String ID,
@@ -427,6 +586,15 @@ public class Service {
 
 	}
 	
+	/**
+	 * View User Post Rest service, this service will be called to
+	 * viw post
+	 * This function will store page in data store
+	 * 
+	 * @param user id
+	 *            provided user id
+	 * @return Status json
+	 */
 	@POST
 	@Path("/ViewUserPostService")
 	public String ViewUserPostService(@FormParam("user_id") String ID) {
@@ -457,6 +625,16 @@ public class Service {
 		return array.toJSONString();
 	}
 
+	/**
+	 * View Post Page Rest service, this service will be called to
+	 * viw post in apage
+	 * This function will store page in data store
+	 * 
+	 * @param Page_id
+	 *            provided Page id
+	 * @return Status json
+	 */
+	
 	@POST
 	@Path("/ViewpostpageService")
 	public String ViewPagePostService(@FormParam("page_id") String ID) {
@@ -486,6 +664,17 @@ public class Service {
 		return array.toJSONString();
 	}
 
+	/**
+	 * Search Page Rest service, this service will be called to
+	 * create new post
+	 * This function will store page in data store
+	 * 
+	 * @param name
+	 *            provided user name
+	 * @param type
+	 *            provided type
+	 * @return Status json
+	 */
 	@POST
 	@Path("/SearchPageService")
 	public String SearchPageService(@FormParam("name") String name,@FormParam("type") String type) {
