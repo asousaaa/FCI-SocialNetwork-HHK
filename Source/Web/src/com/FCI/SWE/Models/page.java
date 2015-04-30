@@ -33,11 +33,22 @@ public class page {
 	public String category;
 	public JSONArray Likes = new JSONArray();
 
-	
-	
-	
-	
-
+	/**
+	 * create new post in a page
+	 * This function will store post in data store
+	 * 
+	 * @param page_id
+	 *            provided page id
+	 * @param user_id
+	 *            provided user id
+	 * @param user_name
+	 *            provided user name          
+	 * @param feeling
+	 *            provided user feeling
+	 * @param content
+	 *            provided post content
+	 * @return Status String
+	 */         
 	public String newpagepost(String page_id,String user_id, String user_name, String feeling,
 			String content) {
 
@@ -67,6 +78,12 @@ public class page {
 		return "page";
 
 	}
+	/**
+	 * put hashtags in a list
+	 * @param token
+	 *            provided post to get as hashtag
+	 * @return Status List
+	 */
 
 	public List gethashes(String token) {
 
@@ -90,6 +107,15 @@ public class page {
 		return hashtags;
 
 	}
+	
+	/**
+	 * View posts
+	 * This function will get posts from data store
+	 * 
+	 * @param page_id
+	 *            provided page id
+	 * @return Status ArrayList
+	 */
 	public  ArrayList ViewPosts(String pageid){
 		
 		ArrayList<page> posts = new ArrayList();
@@ -119,7 +145,16 @@ public class page {
 		System.out.print("pot "+posts.size());
 		return posts;
 	}
-
+ 
+	/**
+	 * Like Post
+	 * 
+	 * @param postid
+	 *            provided post id
+	 * @param userid
+	 *            provided user id         
+	 * @return Status Boolean
+	 */
 	public Boolean LikePost(String postid, String userid) throws ParseException {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -150,6 +185,18 @@ public class page {
 
 	}
 
+	/**
+	 * create new page
+	 * This function will store page in data store
+	 * 
+	 * @param owner
+	 *            provided page admin
+	 * @param name
+	 *            provided name
+	 * @param category
+	 *            provided page category
+	 * @return Status String
+	 */
 	public String newpage(String owner,String name, String cateagory) {
 		
 		DatastoreService datastore = DatastoreServiceFactory
@@ -170,6 +217,17 @@ public class page {
 		return "done";
 	}
 	
+	/**
+	 *  Search for a specific page
+	 *  
+	 * This function will get pages from data store
+	 * 
+	 * @param name
+	 *            provided user name
+	 * @param type
+	 *            provided type
+	 * @return Status ArrayList
+	 */
 	public ArrayList PageSearch(String name,String type){
 		ArrayList<page> pages = new ArrayList();
 		// type = page_name or page_owner

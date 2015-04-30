@@ -35,6 +35,14 @@ public class UserEntity {
 	private String user_id;
 
 	/**
+	 * Constructor accepts user data             
+	 */
+	
+	public UserEntity() {
+
+	}
+	
+	/**
 	 * Constructor accepts user data
 	 * 
 	 * @param name
@@ -42,12 +50,11 @@ public class UserEntity {
 	 * @param email
 	 *            user email
 	 * @param password
-	 *            user provided password
-	 */
-	public UserEntity() {
-
-	}
-
+	 *            provided password
+	 * @id           
+	 *              
+	 *            provided user_id             
+	 */   
 	public UserEntity(String name, String email, String password, String id) {
 		this.name = name;
 		this.email = email;
@@ -55,13 +62,33 @@ public class UserEntity {
 		this.id = id;
 
 	}
-
+     
+	/**
+	 * Constructor accepts user data
+	 * 
+	 * @param name
+	 *            user name
+	 * @param email
+	 *            user email
+	 * @param password
+	 *            provided password
+	 */            
 	public UserEntity(String name, String email, String password) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 	}
-
+	
+	/**
+	 * Constructor accepts user data
+	 * 
+	 * @param friend_name
+	 *             friend name
+	 * @param friend_id
+	 *             friend id
+	 * @param password
+	 *            provided password
+	 */            
 	public UserEntity(String friend_name, String friend_id, String user_id,
 			int i) {
 		this.friend_name = friend_name;
@@ -186,7 +213,15 @@ public class UserEntity {
 
 		return null;
 	}
-
+	/**
+	 * 
+	 * This static method will form UserEntity class using user name 
+	 * This method will serach for user in datastore
+	 * 
+	 * @param name
+	 *            
+	 * @return ArrayList<UserEntity> 
+	 */
 	public static ArrayList<UserEntity> searchforuser(String name) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -232,7 +267,23 @@ public class UserEntity {
 		return true;
 
 	}
-
+	
+	/**
+	 * 
+	 * This static method will form UserEntity class using user name and
+	 * friend name and user id and status
+	 * password This method will save request in datastore
+	 * 
+	 * @param user_name
+	 *            provided user name
+	 * @param fre_id
+	 *            provided friend id
+	 * @param user_id
+	 *            provided  user id
+	 * @param fre_name
+	 *            provided friend name
+	 * @return Boolean
+	 */
 	public Boolean saveRequset(String fre_name, String user_name,
 			String fre_id, String user_id, String status) {
 		DatastoreService datastore = DatastoreServiceFactory
@@ -264,7 +315,15 @@ public class UserEntity {
 		return true;
 
 	}
-
+    
+	/**
+	 * View Friend Request
+	 * This function will view request from data store
+	 * 
+	 * @param userid
+	 *            provided userid
+	 * @return ArrayList<UserEntity>
+	 */
 	public static ArrayList<UserEntity> viewRequset(String user_id) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -295,7 +354,18 @@ public class UserEntity {
 		return returnedUser;
 
 	}
-
+	
+	/**
+	 * Accept Request Rest service, this service will be called to accept
+	 * friend request
+	 * 
+	 * @param friendid
+	 *            provided friend id
+	 * @param userid
+	 *            provided userid
+	 *            
+	 * @return String
+	 */
 	public String acceptRequset(String user_id, String friend_id) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();

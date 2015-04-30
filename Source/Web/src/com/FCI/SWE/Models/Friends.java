@@ -33,6 +33,14 @@ public Friends(String name, String id) {
 		this.name = name;
 		this.id = id;
 	}
+
+/**
+ * function is used to list names of friends 
+ * 
+ * @param user_id
+ *            provided user id
+ * @return Status ArrayList<Friends>
+ */
 public static ArrayList<Friends> Friendlist(String user_id){
 	
 	DatastoreService datastore = DatastoreServiceFactory

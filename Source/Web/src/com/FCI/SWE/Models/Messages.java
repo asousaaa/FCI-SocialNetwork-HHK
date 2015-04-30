@@ -45,7 +45,20 @@ public class Messages {
 	public void setMsg_id(String msg_id) {
 		this.msg_id = msg_id;
 	}
-	
+
+	/**
+	 * function used to send massage
+	 * put on datastore
+	 * @param user_name
+	 *            provided user name
+	 * @param fre_id
+	 *            provided friend id
+	 * @param user_id
+	 *            provided userid
+	 * @param fre_name
+	 *            provided Friend name
+	 * @return Status String
+	 */
 	public String sendmsg(String user_id,String  fre_id,String user_name,
 			String fre_name , String content){
 		

@@ -25,6 +25,7 @@ public class Chat {
 	private String Chat_name;
 	private String msg;
 	
+	/* Constructor to initiolaize group chat */
 	Chat(String name,String names , String id) throws ParseException{
 		this.Chat_name=name;
 		JSONParser parser = new JSONParser();
@@ -38,6 +39,7 @@ public class Chat {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/* Constructor to create normal chat */
 	Chat(String _sender,String content,String name,boolean flage) {
 		this.sender =_sender;
 		this.msg = content;
@@ -83,7 +85,18 @@ public class Chat {
 	public void setGroup_chat(String group_chat) {
 		this.group_chat = group_chat;
 	}
-
+	/**
+	 * create group chat 
+	 * @param name
+	 *            provided chat group chat name
+	 * @param owner
+	 *            provided chat group chat admin   
+	 * @param senders
+	 *            provided massage sender name
+	 * @param ides
+	 *            provided ides of members in chat
+	 * @return Status boolean           
+	 */
 	public boolean CreateChatGroup(String name, String owner, String senders,
 			String ides) {
 
@@ -113,7 +126,19 @@ public class Chat {
 
 		return true;
 	}
-
+	
+	/**
+	 * send massage in group chat 
+	 * This function will store group in data store
+	 * 
+	 * @param id
+	 *            provided group chat id
+	 * @param sender
+	 *            provided sender of the massage
+	 * @param content
+	 *            provided content of massage
+	 * @return Status boolean
+	 */
 	public boolean MsgChatGroup(String id, String Sender, String content) {
 
 		DatastoreService datastore = DatastoreServiceFactory
@@ -158,6 +183,14 @@ public class Chat {
 		return false;
 	}
 
+	/**
+	 * view massage in chat group 
+	 * This function will store group in data store
+	 * 
+	 * @param id
+	 *            provided group chat id
+	 * @return Status ArrayList<Chat>
+	 */
 	public ArrayList<Chat> ViewMsgChatGroup(String id) throws ParseException {
 		JSONParser parser = new JSONParser();
 		Object obj = null;
@@ -197,6 +230,13 @@ public class Chat {
 		this.msg = msg;
 	}
 
+	/**
+	 * View Chat Group user is using
+	 * 
+	 * @param id
+	 *            provided user id
+	 * @return Status ArrayList <Chat>
+	 */
 	public ArrayList<Chat> ViewChatGroup(String userid) throws ParseException {
 		JSONParser parser = new JSONParser();
 		Object obj = null;

@@ -666,7 +666,7 @@ public class Service {
 
 	/**
 	 * Search Page Rest service, this service will be called to
-	 * create new post
+	 * Search for a specific page
 	 * This function will store page in data store
 	 * 
 	 * @param name
@@ -699,6 +699,62 @@ public class Service {
 		return array.toJSONString();
 	}
 
+	/**
+	 * Like Post Rest service, this service will be called to
+	 * Like post
+	 * This function will store page in data store
+	 * 
+	 * @param post_id
+	 *            provided Post Id
+	 * @param User_id
+	 *            provided user id
+	 * @return Status json
+	 */
+	@POST
+	@Path("/LikePostService")
+	public String LikePostService(@FormParam("postid") String post_id,
+			@FormParam("userid") String user_id) throws ParseException {
+
+		
+		JSONObject object = new JSONObject();
+
+		Post P = new Post();
+		if (! P.LikePost(post_id, user_id)) {
+			object.put("Status", "Failed");
+		} else {
+			object.put("Status", "OK");
+		}
+		return object.toString();
+
+	}
+	
+	/**
+	 * Like Post Pge Rest service, this service will be called to
+	 * Like post in a page
+	 * This function will store page in data store
+	 * @param post_id
+	 *            provided Post Id
+	 * @param User_id
+	 *            provided user id
+	 * @return Status json
+	 */
+
+	@POST
+	@Path("/LikePostPageService")
+	public String LikePostPageService(@FormParam("postid") String post_id,
+			@FormParam("userid") String user_id) throws ParseException {
+
+		JSONObject object = new JSONObject();
+
+		page P = new page();
+		if (! P.LikePost(post_id,user_id)) {
+			object.put("Status", "Failed");
+		} else {
+			object.put("Status", "OK");
+		}
+		return object.toString();
+
+	}
+	
 	
 }
-

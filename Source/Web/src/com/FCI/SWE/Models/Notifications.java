@@ -46,7 +46,7 @@ public class Notifications {
 	}
 
 
-
+/* Constructor  to access data */ 
 	public Notifications(String id,String name,String u_id,String u_name,String not,String n_id){
 		this.friend_id=id;
 		this.friend_name=name;
@@ -75,7 +75,13 @@ public class Notifications {
 		this.type = type;
 	}
 	
-	
+	/**
+	 * view Notification
+	 * 
+	 * @param userid
+	 *            provided user id
+	 * @return Status ArrayList<Notifications>
+	 */
 	public static ArrayList<Notifications> Notifiy(String user_id) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();

@@ -1,8 +1,11 @@
 package com.FCI.SWE.Models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -39,7 +42,15 @@ public class Hashtag {
 	public void setPost_Id(String post_Id) {
 		Post_Id = post_Id;
 	}
-
+	/**
+	 * function to add hashtag
+	 * 
+	 * @param name
+	 *            provided user name
+	 * @param id
+	 *            provided user id           
+	 * @return Status Boolean
+	 */
 	public Boolean AddHashtag(String name,String id) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -54,6 +65,34 @@ public class Hashtag {
 		datastore.put(employee);
 
 		return true;
+	}
+	
+	public ArrayList Viewhashtags(){
+		
+		ArrayList<Hashtag> hash = new ArrayList();
+		HashMap<String,Integer> map = new HashMap<String,Integer>();
+		
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query("Hashtag");
+		PreparedQuery pq = datastore.prepare(q);
+
+		for (Entity entity : pq.asIterable()) {
+			String name= entity.getProperty("Name").toString();
+			Boolean flage = false;
+			for(int i=0;i<map.size();i++){
+					if(map.containsKey(name)){
+						map.put(name,Integer.valueOf(map.get("name").toString())+1);
+						flage= true;
+						break;
+					}
+				}
+				if(!flage){
+					map.put(name,1);
+					}				
+			}
+		
+		return hash;
 	}
 
 }

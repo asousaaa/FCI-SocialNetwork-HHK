@@ -100,6 +100,22 @@ public class Post {
 		this.notes = notes;
 	}
 
+	/**
+	 * create new post
+	 * This function will store page in data store
+	 * 
+	 * @param user_id
+	 *            provided user id
+	 * @param user_name
+	 *            provided username
+	 * @param feeling
+	 *            provided user feeling
+	 * @param type
+	 *            provided type 
+	 * @param content
+	 *            provided content
+	 * @return Status String
+	 */
 	public String newpost(String user_id, String user_name, String feeling,
 			String content, String type) {
 
@@ -129,7 +145,13 @@ public class Post {
 		return "post";
 
 	}
-
+    
+	/**
+	 * put hashtags in a list
+	 * @param token
+	 *            provided post to get as hashtag
+	 * @return Status List
+	 */
 	public List gethashes(String token) {
 
 		List<String> hashtags = new ArrayList<String>();
@@ -153,6 +175,14 @@ public class Post {
 
 	}
 
+	/**
+	 * View posts
+	 * This function will get posts from data store
+	 * 
+	 * @param user_id
+	 *            provided user id
+	 * @return Status ArrayList
+	 */
 	public ArrayList ViewPosts(String userid) {
 
 		ArrayList<Post> posts = new ArrayList();
@@ -199,7 +229,16 @@ public class Post {
 		System.out.print("pot " + posts.size());
 		return posts;
 	}
-
+	
+	/**
+	 * Like Post
+	 * 
+	 * @param postid
+	 *            provided post id
+	 * @param userid
+	 *            provided user id         
+	 * @return Status Boolean
+	 */
 	public Boolean LikePost(String postid, String userid) throws ParseException {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
