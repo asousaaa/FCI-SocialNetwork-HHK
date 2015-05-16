@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="2" passed="2">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="772" started-at="2015-05-10T18:22:58Z" finished-at="2015-05-10T18:22:59Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="772" started-at="2015-05-10T18:22:58Z" finished-at="2015-05-10T18:22:59Z">
+      <class name="Test.HashtagTest">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:Test.HashtagTest@4f652035]" name="setUp" is-config="true" duration-ms="72" started-at="2015-05-10T21:22:58Z" finished-at="2015-05-10T21:22:58Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="AddHashtag()[pri:0, instance:Test.HashtagTest@4f652035]" name="AddHashtag" duration-ms="679" started-at="2015-05-10T21:22:58Z" finished-at="2015-05-10T21:22:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- AddHashtag -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:Test.HashtagTest@4f652035]" name="tearDown" is-config="true" duration-ms="0" started-at="2015-05-10T21:22:59Z" finished-at="2015-05-10T21:22:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="Viewhashtags()[pri:0, instance:Test.HashtagTest@4f652035]" name="Viewhashtags" duration-ms="0" started-at="2015-05-10T21:22:59Z" finished-at="2015-05-10T21:22:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Viewhashtags -->
+      </class> <!-- Test.HashtagTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

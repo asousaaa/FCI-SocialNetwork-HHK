@@ -1,23 +1,15 @@
 package com.FCI.SWE.Models;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.simple.parser.*;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entities;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.*;
 
 public class Post {
-	public String ID;
+
+	public String ID; // post id
 	public String user_ID;
 	public String user_name;
 	public String post_ID;
@@ -27,6 +19,13 @@ public class Post {
 	public String security;
 	public String notes;
 	public JSONArray Likes = new JSONArray();
+	static DatastoreService datastore = DatastoreServiceFactory
+			.getDatastoreService();
+	static Query q = new Query();
+	static Query gaeQuery = new Query();
+	static PreparedQuery pq;
+	static List<Entity> list;
+	static Entity Record;
 
 	public String getID() {
 		return ID;
@@ -101,74 +100,66 @@ public class Post {
 	}
 
 	/**
-	 * create new post
-	 * This function will store page in data store
+	 * create new post This function will store page in data store
 	 * 
-	 * @param user_id
+	 * @param UserID
 	 *            provided user id
-	 * @param user_name
-	 *            provided username
-	 * @param feeling
+	 * @param UserName
+	 *            provided user name
+	 * @param Feeling
 	 *            provided user feeling
-	 * @param type
-	 *            provided type 
-	 * @param content
+	 * @param Type
+	 *            provided type
+	 * @param Content
 	 *            provided content
 	 * @return Status String
 	 */
-	public String newpost(String user_id, String user_name, String feeling,
-			String content, String type) {
+	public String newpost(String UserID, String UserName, String Feeling,
+			String Content, String Type) {
+		gaeQuery = new Query("post");
+		pq = datastore.prepare(gaeQuery);
+		list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		Query gaeQuery = new Query("post");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
-
-		Entity employee = new Entity("post", list.size() + 2);
-		employee.setProperty("feeling", feeling);
-		employee.setProperty("user_name", user_name);
-		employee.setProperty("user_id", user_id);
-		employee.setProperty("content", content);
-		employee.setProperty("type", type);
-		employee.setProperty("Likes", Likes.toJSONString());
-		datastore.put(employee);
+		Record = new Entity("post", list.size() + 2);
+		Record.setProperty("feeling", Feeling);
+		Record.setProperty("user_name", UserName);
+		Record.setProperty("user_id", UserID);
+		Record.setProperty("content", Content);
+		Record.setProperty("type", Type);
+		Record.setProperty("Likes", Likes.toJSONString());
+		datastore.put(Record);
 
 		Hashtag H = new Hashtag();
-		List hash = gethashes(content);
+		List<String> hash = gethashes(Content);
 
 		for (int i = 0; i < hash.size(); i++) {
 			H.AddHashtag(hash.get(i).toString(),
-			String.valueOf(list.size() + 1));
+					String.valueOf(list.size() + 1));
 		}
 
 		return "post";
-
 	}
-    
+
 	/**
-	 * put hashtags in a list
-	 * @param token
+	 * put hashtags in a list spliting hashtag from post
+	 * 
+	 * @param hashtag
 	 *            provided post to get as hashtag
 	 * @return Status List
 	 */
-	public List gethashes(String token) {
+
+	public List<String> gethashes(String hashtag) {
 
 		List<String> hashtags = new ArrayList<String>();
-		StringTokenizer tokenizer = new StringTokenizer(token);
+		StringTokenizer split = new StringTokenizer(hashtag);
 
-		while (tokenizer.hasMoreTokens()) {
-			token = tokenizer.nextToken();
-			if (token.startsWith("@")) {
-				if (!hashtags.contains(token))
-					hashtags.add(token);
+		while (split.hasMoreTokens()) {
+			hashtag = split.nextToken();
+			if (hashtag.startsWith("@")) {
+				if (!hashtags.contains(hashtag))
+					hashtags.add(hashtag);
 
 			}
-		}
-
-		for (int i = 0; i < hashtags.size(); i++) {
-			System.out.println(hashtags.get(i));
-
 		}
 
 		return hashtags;
@@ -176,41 +167,31 @@ public class Post {
 	}
 
 	/**
-	 * View posts
-	 * This function will get posts from data store
+	 * View posts This function will get posts from data store
 	 * 
 	 * @param user_id
 	 *            provided user id
 	 * @return Status ArrayList
 	 */
-	public ArrayList ViewPosts(String userid) {
+	public ArrayList<Post> ViewPosts(String userid) {
 
-		ArrayList<Post> posts = new ArrayList();
-		Friends f = new Friends();
-		ArrayList<Friends> friend = f.Friendlist(userid);
-		System.out.print("size = " + friend.size());
-		ArrayList data = new ArrayList();
+		ArrayList<Post> posts = new ArrayList<Post>();
+		ArrayList<Friends> friend = Friends.Friendlist(userid);
+		ArrayList<String> data = new ArrayList<String>();
 
 		for (int i = 0; i < friend.size(); i++) {
 			data.add(friend.get(i).getId());
 		}
+
 		data.add(userid);
 
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		for (int i = 0; i < data.size(); i++) {
-
-			System.out.print(data.get(i));
-		}
-		Query q = new Query("post");
-		PreparedQuery pq = datastore.prepare(q);
+		q = new Query("post");
+		pq = datastore.prepare(q);
 		for (Entity entity : pq.asIterable()) {
-			System.out.print("enter\n");
 			for (int i = 0; i < data.size(); i++) {
-				System.out.print("loop\n");
+
 				if (data.get(i).toString()
 						.equals(entity.getProperty("user_id").toString())) {
-					System.out.print("l\n");
 					Post p = new Post();
 					p.setID(Long.toString(entity.getKey().getId()));
 					p.setUser_name(entity.getProperty("user_name").toString());
@@ -226,24 +207,21 @@ public class Post {
 
 		}
 
-		System.out.print("pot " + posts.size());
 		return posts;
 	}
-	
+
 	/**
 	 * Like Post
 	 * 
 	 * @param postid
 	 *            provided post id
 	 * @param userid
-	 *            provided user id         
+	 *            provided user id
 	 * @return Status Boolean
 	 */
 	public Boolean LikePost(String postid, String userid) throws ParseException {
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		Query q = new Query("Post");
-		PreparedQuery pq = datastore.prepare(q);
+		q = new Query("Post");
+		pq = datastore.prepare(q);
 
 		for (Entity entity : pq.asIterable()) {
 

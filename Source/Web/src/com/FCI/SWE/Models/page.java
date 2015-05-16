@@ -16,7 +16,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
-public class page {
+public class Page {
 	public String ID;
 	public String user_ID;
 	public String page_ID;
@@ -118,7 +118,7 @@ public class page {
 	 */
 	public  ArrayList ViewPosts(String pageid){
 		
-		ArrayList<page> posts = new ArrayList();
+		ArrayList<Page> posts = new ArrayList();
 		
 		DatastoreService datastore  = DatastoreServiceFactory
 				.getDatastoreService();
@@ -128,7 +128,7 @@ public class page {
 			System.out.print("enter\n");
 			if(entity.getProperty("page_id").toString().equals(pageid)){      
 			//	System.out.print("l\n");
-				page p = new page();
+				Page p = new Page();
 				p.setID(Long.toString(entity.getKey().getId()));
 				p.setUser_name(entity.getProperty("user_name").toString());
 				p.setUser_ID(entity.getProperty("user_id").toString());
@@ -229,7 +229,7 @@ public class page {
 	 * @return Status ArrayList
 	 */
 	public ArrayList PageSearch(String name,String type){
-		ArrayList<page> pages = new ArrayList();
+		ArrayList<Page> pages = new ArrayList();
 		// type = page_name or page_owner
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -237,7 +237,7 @@ public class page {
 		PreparedQuery pq = datastore.prepare(q);
 		for(Entity entity : pq.asIterable()){
 			if(entity.getProperty(type).equals(name)){
-				page p = new page();
+				Page p = new Page();
 				
 				p.setPage_ID(Long.toString(entity.getKey().getId()));
 		

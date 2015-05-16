@@ -1,47 +1,43 @@
 package com.FCI.SWE.Models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import java.util.*;
+import org.json.simple.parser.*;
 import org.json.simple.JSONArray;
-
-import com.FCI.SWE.Notification.UserNotification;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-
+import com.google.appengine.api.datastore.*;
 
 public class Chat {
-	private String chat_id;
+	private String chat_id; // record id
 	private JSONArray senders;
 	private String sender;
 	private String recivers;
 	private String group_chat;
 	private String Chat_name;
 	private String msg;
-	
+
+	static DatastoreService datastore = DatastoreServiceFactory
+			.getDatastoreService();
+	static Query gaeQuery = new Query();
+	static PreparedQuery pq;
+	static Entity Record;
+	static List<Entity> lists;
+
 	/* Constructor to initiolaize group chat */
-	Chat(String name,String names , String id) throws ParseException{
-		this.Chat_name=name;
+	Chat(String name, String names, String id) throws ParseException {
+		this.Chat_name = name;
 		JSONParser parser = new JSONParser();
 		Object obj = parser.parse(names);
 		JSONArray array = (JSONArray) obj;
-		this.senders=array;
-		this.chat_id=id;
+		this.senders = array;
+		this.chat_id = id;
 	}
 
 	public Chat() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	/* Constructor to create normal chat */
-	Chat(String _sender,String content,String name,boolean flage) {
-		this.sender =_sender;
+	Chat(String _sender, String content, String name, boolean flage) {
+		this.sender = _sender;
 		this.msg = content;
 		this.Chat_name = name;
 	}
@@ -85,135 +81,7 @@ public class Chat {
 	public void setGroup_chat(String group_chat) {
 		this.group_chat = group_chat;
 	}
-	/**
-	 * create group chat 
-	 * @param name
-	 *            provided chat group chat name
-	 * @param owner
-	 *            provided chat group chat admin   
-	 * @param senders
-	 *            provided massage sender name
-	 * @param ides
-	 *            provided ides of members in chat
-	 * @return Status boolean           
-	 */
-	public boolean CreateChatGroup(String name, String owner, String senders,
-			String ides) {
 
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		Query gaeQuery = new Query("Chats");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
-
-		Entity employee = new Entity("Chats", list.size() + 2);
-
-		employee.setProperty("GroupName", name);
-		employee.setProperty("Sender", senders);
-		employee.setProperty("Ides", ides);
-		datastore.put(employee);
-
-		Query Q = new Query("Group_Notifications");
-		PreparedQuery p = datastore.prepare(Q);
-		List<Entity> lists = p.asList(FetchOptions.Builder.withDefaults());
-
-		Entity eme = new Entity("Group_Notifications", lists.size() + 2);
-		eme.setProperty("GroupName", name);
-		eme.setProperty("owner", owner);
-		eme.setProperty("Type", "CreateGroupChat");
-		eme.setProperty("note", "Create");
-		datastore.put(eme);
-
-		return true;
-	}
-	
-	/**
-	 * send massage in group chat 
-	 * This function will store group in data store
-	 * 
-	 * @param id
-	 *            provided group chat id
-	 * @param sender
-	 *            provided sender of the massage
-	 * @param content
-	 *            provided content of massage
-	 * @return Status boolean
-	 */
-	public boolean MsgChatGroup(String id, String Sender, String content) {
-
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		Query gaeQuery = new Query("Chats");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		for (Entity entity : pq.asIterable()) {
-
-			if (Long.toString(entity.getKey().getId()).equals(id)) {
-
-				Query gaeQuery1 = new Query("Chat_Group");
-				PreparedQuery pq1 = datastore.prepare(gaeQuery1);
-				List<Entity> list = pq1.asList(FetchOptions.Builder
-						.withDefaults());
-
-				Entity employee = new Entity("Chat_Group", list.size() + 2);
-
-				employee.setProperty("GroupName", entity.getProperty("GroupName"));
-				employee.setProperty("GroupId", Long.toString(entity.getKey().getId()));
-				employee.setProperty("Sender", Sender);
-				employee.setProperty("SeenBy", "");
-				employee.setProperty("Content", content);
-				datastore.put(employee);
-
-				Query Q = new Query("Group_Notifications");
-				PreparedQuery p = datastore.prepare(Q);
-				List<Entity> lists = p.asList(FetchOptions.Builder
-						.withDefaults());
-
-				Entity eme = new Entity("Group_Notifications", lists.size() + 2);
-				eme.setProperty("GroupName", entity.getProperty("GroupName"));
-				eme.setProperty("owner", Sender);
-				eme.setProperty("Type", "MsgGroupChat");
-				eme.setProperty("note", entity.getProperty("Ides"));
-				datastore.put(eme);
-
-				return true;
-
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * view massage in chat group 
-	 * This function will store group in data store
-	 * 
-	 * @param id
-	 *            provided group chat id
-	 * @return Status ArrayList<Chat>
-	 */
-	public ArrayList<Chat> ViewMsgChatGroup(String id) throws ParseException {
-		JSONParser parser = new JSONParser();
-		Object obj = null;
-		
-		ArrayList<Chat> MSG = new ArrayList<Chat>();
-		
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		Query gaeQuery = new Query("Chat_Group");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		for (Entity entity : pq.asIterable()) {
-			if(entity.getProperty("GroupId").equals(id)){
-				MSG.add(new Chat(entity.getProperty("Sender").toString(),
-						entity.getProperty("Content").toString(),
-						entity.getProperty("GroupName").toString(),true));
-				
-			}
-			
-		}
-		
-		return MSG;
-	}
-	
 	public String getSender() {
 		return sender;
 	}
@@ -231,7 +99,131 @@ public class Chat {
 	}
 
 	/**
-	 * View Chat Group user is using
+	 * create group chat
+	 * 
+	 * @param name
+	 *            provided chat group chat name
+	 * @param owner
+	 *            provided chat group chat admin
+	 * @param senders
+	 *            provided people name in group chat
+	 * @param ides
+	 *            provided ides of members in chat
+	 * @return Status boolean
+	 */
+	public boolean CreateChatGroup(String name, String owner, String senders,
+			String ides) {
+
+		// add group chat to DB
+		gaeQuery = new Query("Chats");
+		pq = datastore.prepare(gaeQuery);
+		lists = pq.asList(FetchOptions.Builder.withDefaults());
+
+		Record = new Entity("Chats", lists.size() + 2);
+
+		Record.setProperty("GroupName", name);
+		Record.setProperty("Sender", senders);
+		Record.setProperty("Ides", ides);
+		datastore.put(Record);
+
+		// create notification about new group chat
+		gaeQuery = new Query("Group_Notifications");
+		pq = datastore.prepare(gaeQuery);
+		lists = pq.asList(FetchOptions.Builder.withDefaults());
+
+		Record = new Entity("Group_Notifications", lists.size() + 2);
+		Record.setProperty("GroupName", name);
+		Record.setProperty("owner", owner);
+		Record.setProperty("Type", "CreateGroupChat");
+		Record.setProperty("note", "Create");
+		datastore.put(Record);
+
+		return true;
+	}
+
+	/**
+	 * send massage in group chat
+	 * 
+	 * @param id
+	 *            provided group chat id
+	 * @param sender
+	 *            provided sender of the massage
+	 * @param content
+	 *            provided content of massage
+	 * @return provide true if found group chat else return false
+	 */
+	public boolean MsgChatGroup(String id, String Sender, String content) {
+
+		gaeQuery = new Query("Chats");
+		pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) {
+
+			// find group chat in DB if found
+			if (Long.toString(entity.getKey().getId()).equals(id)) {
+
+				Query gaeQuery1 = new Query("Chat_Group");
+				PreparedQuery pq1 = datastore.prepare(gaeQuery1);
+				lists = pq1.asList(FetchOptions.Builder.withDefaults());
+
+				// save message in DB table
+				Record = new Entity("Chat_Group", lists.size() + 2);
+				Record.setProperty("GroupName", entity.getProperty("GroupName"));
+				Record.setProperty("GroupId",
+						Long.toString(entity.getKey().getId()));
+				Record.setProperty("Sender", Sender);
+				Record.setProperty("SeenBy", "");
+				Record.setProperty("Content", content);
+				datastore.put(Record);
+
+				// notify this update to notification DB table
+				gaeQuery1 = new Query("Group_Notifications");
+				pq1 = datastore.prepare(gaeQuery1);
+				lists = pq1.asList(FetchOptions.Builder.withDefaults());
+
+				Record = new Entity("Group_Notifications", lists.size() + 2);
+				Record.setProperty("GroupName", entity.getProperty("GroupName"));
+				Record.setProperty("owner", Sender);
+				Record.setProperty("Type", "MsgGroupChat");
+				Record.setProperty("note", entity.getProperty("Ides"));
+				datastore.put(Record);
+
+				return true;
+
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * view massage in chat group
+	 * 
+	 * @param id
+	 *            provided group chat id
+	 * @return Status ArrayList<Chat> provided copy of msg in this group chat
+	 */
+	public ArrayList<Chat> ViewMsgChatGroup(String id) throws ParseException {
+
+		ArrayList<Chat> MSG = new ArrayList<Chat>();
+
+		gaeQuery = new Query("Chat_Group");
+		pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) {
+			if (entity.getProperty("GroupId").equals(id)) {
+				MSG.add(new Chat(entity.getProperty("Sender").toString(),
+						entity.getProperty("Content").toString(), entity
+								.getProperty("GroupName").toString(), true));
+
+			}
+
+		}
+
+		// return arrayList of msg
+		return MSG;
+	}
+
+	/**
+	 * View Chat Group of this user
 	 * 
 	 * @param id
 	 *            provided user id
@@ -240,39 +232,31 @@ public class Chat {
 	public ArrayList<Chat> ViewChatGroup(String userid) throws ParseException {
 		JSONParser parser = new JSONParser();
 		Object obj = null;
-		
+
 		ArrayList<Chat> group = new ArrayList<Chat>();
-		
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		Query gaeQuery = new Query("Chats");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
+
+		gaeQuery = new Query("Chats");
+		pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {
 
 			String ides = entity.getProperty("Ides").toString();
 
 			obj = parser.parse(ides);
-			
+			// get ides of this record then check if user id found then save
+			// this record
+			// in arrayList<chats>
 			JSONArray array = (JSONArray) obj;
-			for(int i = 0 ;i<array.size();i++){
-				if(array.get(i).equals(userid)){
-					group.add(new Chat(entity.getProperty("GroupName").toString(),
-							entity.getProperty("Sender").toString(),
-							 Long.toString(entity.getKey().getId())));
+			for (int i = 0; i < array.size(); i++) {
+				if (array.get(i).equals(userid)) {
+					group.add(new Chat(entity.getProperty("GroupName")
+							.toString(), entity.getProperty("Sender")
+							.toString(), Long.toString(entity.getKey().getId())));
 				}
-				
+
 			}
 		}
-		
+
 		return group;
 	}
-	
-	
-	
+
 }
-
-
-
-
-
-

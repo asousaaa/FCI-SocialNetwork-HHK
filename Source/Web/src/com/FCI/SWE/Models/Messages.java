@@ -1,13 +1,8 @@
 package com.FCI.SWE.Models;
 
-import java.util.List;
+import java.util.*;
+import com.google.appengine.api.datastore.*;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
 
 public class Messages {
 	public String sender_id;
@@ -15,6 +10,7 @@ public class Messages {
 	public String receiver_id;
  	public String receiver_name;
 	public String msg_id;
+	
 	public String getSender_id() {
 		return sender_id;
 	}
@@ -49,18 +45,21 @@ public class Messages {
 	/**
 	 * function used to send massage
 	 * put on datastore
-	 * @param user_name
+	 * @param UserName
 	 *            provided user name
-	 * @param fre_id
+	 * @param FriendID
 	 *            provided friend id
-	 * @param user_id
+	 * @param UserID
 	 *            provided userid
-	 * @param fre_name
+	 * @param FriendName
 	 *            provided Friend name
+	 * @param Content
+	 *            provided massege content           
+	 *            
 	 * @return Status String
 	 */
-	public String sendmsg(String user_id,String  fre_id,String user_name,
-			String fre_name , String content){
+	public String sendmsg(String UserID,String FriendID,String UserName,
+			String FriendName , String Content){
 		
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -68,30 +67,29 @@ public class Messages {
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 		
-		Entity employee = new Entity("Messages", list.size() + 2);
-		employee.setProperty("friend_name", fre_name);
-		employee.setProperty("user_name", user_name);
-		employee.setProperty("friend_id", fre_id);
-		employee.setProperty("user_id", user_id);
-		employee.setProperty("content", content);
-		datastore.put(employee);
+		Entity Record = new Entity("Messages", list.size() + 2);
+		Record.setProperty("friend_name", FriendName);
+		Record.setProperty("user_name", UserName);
+		Record.setProperty("friend_id", FriendID);
+		Record.setProperty("user_id", UserID);
+		Record.setProperty("content", Content);
+		datastore.put(Record);
 		
 		Query Q= new Query("Notifications");
 		PreparedQuery p = datastore.prepare(Q);
-		List<Entity> lists = p.asList(FetchOptions.Builder.withDefaults());
+		List<Entity> list2 = p.asList(FetchOptions.Builder.withDefaults());
 
-		Entity eme = new Entity("Notifications", lists.size() + 2);
-		eme.setProperty("friend_name", fre_name);
-		eme.setProperty("friend_id", fre_id);
-		eme.setProperty("user_name", user_name);
-		eme.setProperty("note", "accept");
-		eme.setProperty("user_id", user_id);
-		eme.setProperty("type", "Notifiy_Message");
-		eme.setProperty("note", "empty");
+		Entity Record2 = new Entity("Notifications", list2.size() + 2);
+		Record2.setProperty("friend_name", FriendName);
+		Record2.setProperty("friend_id", FriendID);
+		Record2.setProperty("user_name", UserName);
+		Record2.setProperty("note", "accept");
+		Record2.setProperty("user_id", UserID);
+		Record2.setProperty("type", "Notifiy_Message");
+		Record2.setProperty("note", "empty");
 		
-		datastore.put(eme);
+		datastore.put(Record2);
 		
 		return "accept";
-	}
-	
+	}	
 }
